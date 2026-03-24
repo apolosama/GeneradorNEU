@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>Generador de Códigos NEU - EEQ</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1140/1140042.png">
+    <title>Generador Códigos NEU DOMLS QUITO</title>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     
     <style>
@@ -32,58 +31,6 @@
             position: relative;
         }
 
-        .logo-corner {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 10;
-            background: white;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            transition: transform 0.3s;
-        }
-
-        .logo-corner:hover {
-            transform: scale(1.05);
-        }
-
-        .logo-corner img {
-            width: 50px;
-            height: 50px;
-            object-fit: contain;
-        }
-
-        .logo-corner-right {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            z-index: 10;
-            background: rgba(0, 51, 102, 0.9);
-            padding: 8px 15px;
-            border-radius: 30px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            backdrop-filter: blur(5px);
-        }
-
-        .logo-corner-right span {
-            color: white;
-            font-weight: bold;
-            font-size: 0.85rem;
-        }
-
-        .logo-corner-right small {
-            color: #FFB81C;
-            font-size: 0.7rem;
-        }
-
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -94,13 +41,12 @@
                 transform: translateY(0);
             }
         }
-
+        
         .header {
             background: linear-gradient(135deg, #003366 0%, #0066CC 100%);
             color: white;
             padding: 30px;
             text-align: center;
-            position: relative;
         }
 
         .logo {
@@ -121,11 +67,6 @@
             font-size: 2rem;
             margin: 0;
             font-weight: 600;
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
         }
 
         .user-status {
@@ -162,7 +103,6 @@
             50% { opacity: 0.5; transform: scale(0.8); }
             100% { opacity: 1; transform: scale(1); }
         }
-
         .control-panel {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -242,7 +182,6 @@
             color: #6c757d;
             margin-top: 5px;
         }
-
         .btn-primary, .btn-secondary, .btn-danger {
             display: inline-flex;
             align-items: center;
@@ -290,7 +229,6 @@
             width: 18px;
             height: 18px;
         }
-
         .filter-section {
             padding: 15px 30px;
             background: white;
@@ -322,7 +260,6 @@
             color: white;
             border-color: transparent;
         }
-
         .search-actions {
             padding: 20px 30px;
             background: white;
@@ -384,7 +321,6 @@
             gap: 10px;
             flex-wrap: wrap;
         }
-
         .table-container {
             position: relative;
             overflow-x: auto;
@@ -424,7 +360,6 @@
             padding: 40px;
             color: #6c757d;
         }
-
         .user-badge {
             display: inline-block;
             padding: 4px 8px;
@@ -439,7 +374,6 @@
             color: #003366;
             font-weight: 500;
         }
-
         .copy-btn, .delete-btn {
             padding: 5px 10px;
             margin: 0 3px;
@@ -467,7 +401,6 @@
         .delete-btn:hover {
             background: #c82333;
         }
-
         .loading-spinner {
             position: absolute;
             top: 50%;
@@ -495,7 +428,6 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
         .pagination {
             display: flex;
             justify-content: center;
@@ -530,7 +462,6 @@
             color: #495057;
             font-weight: 500;
         }
-
         .notification {
             position: fixed;
             bottom: 20px;
@@ -549,15 +480,6 @@
         .notification.show {
             opacity: 1;
         }
-
-        .footer {
-            background: #003366;
-            color: white;
-            text-align: center;
-            padding: 15px;
-            font-size: 0.8rem;
-        }
-
         @media (max-width: 768px) {
             .control-panel {
                 grid-template-columns: 1fr;
@@ -603,40 +525,11 @@
                 padding: 6px 15px;
                 font-size: 0.85rem;
             }
-            
-            .logo-corner {
-                width: 45px;
-                height: 45px;
-                top: 10px;
-                left: 10px;
-            }
-            
-            .logo-corner img {
-                width: 35px;
-                height: 35px;
-            }
-            
-            .logo-corner-right {
-                top: 10px;
-                right: 10px;
-                padding: 5px 10px;
-            }
-            
-            .logo-corner-right span {
-                font-size: 0.7rem;
-            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo-corner">
-            <img src="https://cdn-icons-png.flaticon.com/512/1140/1140042.png" alt="Logo EEQ">
-        </div>
-        <div class="logo-corner-right">
-            <span>EMPRESA ELÉCTRICA QUITO</span>
-            <small>NEU</small>
-        </div>
         <div class="header">
             <div class="logo">
                 <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -644,9 +537,8 @@
                     <path d="M12 7v10"/>
                     <path d="M7 12h10"/>
                 </svg>
-                <h1>Generador de Códigos NEU</h1>
+                <h1>Generador Códigos NEU DOMLS QUITO</h1>
             </div>
-            <p class="subtitle">Formato: <strong>YYMMDD_RRR</strong> (Ejemplo: 241225_ABC)</p>
             <div id="userStatus" class="user-status">
                 <div class="status-indicator"></div>
                 <span id="statusText">Conectando...</span>
@@ -676,7 +568,6 @@
                     Generar Código NEU
                 </button>
             </div>
-
             <div class="stats-section">
                 <div class="stat-card">
                     <div class="stat-value" id="totalCodes">0</div>
@@ -760,10 +651,6 @@
             <span id="pageInfo">Página 1</span>
             <button id="nextPage" disabled>Siguiente</button>
         </div>
-        <div class="footer">
-            <p>© 2024 Empresa Eléctrica Quito - Sistema de Generación de Códigos NEU</p>
-            <p style="font-size: 0.7rem; margin-top: 5px;">Códigos generados con formato YYMMDD_RRR</p>
-        </div>
         <div id="notification" class="notification"></div>
     </div>
     <script type="importmap">
@@ -820,6 +707,7 @@
             loadingSpinner: document.getElementById('loadingSpinner'),
             notification: document.getElementById('notification')
         };
+
         function showNotification(message, type = 'success') {
             elements.notification.textContent = message;
             elements.notification.style.backgroundColor = type === 'success' ? '#28a745' : type === 'warning' ? '#FFB81C' : '#dc3545';
@@ -1083,7 +971,7 @@
                         <td>${formatDate(code.codeDate)}</td>
                         <td>
                             <span class="user-badge ${isOwner ? 'owner' : ''}">
-                                ${code.userEmail === 'Usuario Anónimo' ? '⚡ Anónimo' : `⚡ ${code.userEmail}`}
+                                ${code.userEmail === 'Usuario Anónimo' ? '👤 Anónimo' : `👤 ${code.userEmail}`}
                                 ${isOwner ? ' (Tú)' : ''}
                             </span>
                         </td>
@@ -1196,10 +1084,10 @@
             
             const ws = XLSX.utils.json_to_sheet(exportData);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Códigos NEU EEQ');
+            XLSX.utils.book_append_sheet(wb, ws, 'Códigos NEU');
             
             const filterType = currentFilter === 'myCodes' ? 'mis_codigos' : 'todos';
-            const fileName = `EEQ_NEU_codes_${filterType}_${new Date().toISOString().slice(0,19)}.xlsx`;
+            const fileName = `NEU_codes_${filterType}_${new Date().toISOString().slice(0,19)}.xlsx`;
             XLSX.writeFile(wb, fileName);
             showNotification(`📊 Exportados ${filteredCodes.length} códigos a Excel`, 'success');
         };
@@ -1215,6 +1103,7 @@
         window.deleteCodeById = function(id, userId) {
             deleteCode(id, userId);
         };
+
         setupEventListeners();
         initAuth();
     </script>
