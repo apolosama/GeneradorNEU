@@ -133,7 +133,7 @@
             margin-bottom: 8px;
         }
 
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             max-width: 300px;
             padding: 10px;
@@ -143,7 +143,7 @@
             transition: all 0.3s;
         }
 
-        .form-group input:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: #0066CC;
             box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
@@ -154,6 +154,17 @@
             margin-top: 5px;
             color: #6c757d;
             font-size: 0.8rem;
+        }
+        
+        /* Two columns for name fields */
+        .name-row {
+            display: flex;
+            gap: 15px;
+            max-width: 300px;
+        }
+        .name-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
         }
 
         .stats-section {
@@ -525,6 +536,11 @@
                 padding: 6px 15px;
                 font-size: 0.85rem;
             }
+            
+            .name-row {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
     </style>
 </head>
@@ -547,6 +563,22 @@
         <div class="control-panel">
             <div class="generator-section">
                 <h2>Generar Nuevo Código</h2>
+                <!-- Nuevos campos: Nombre, Apellido y Aplicación -->
+                <div class="name-row">
+                    <div class="form-group">
+                        <label for="firstName">Nombre</label>
+                        <input type="text" id="firstName" placeholder="Tu nombre" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Apellido</label>
+                        <input type="text" id="lastName" placeholder="Tu apellido" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appName">Aplicación</label>
+                    <input type="text" id="appName" placeholder="Nombre de la aplicación" maxlength="100">
+                    <small>Ej: Sistema Ventas, App Móvil, Dashboard, etc.</small>
+                </div>
                 <div class="form-group">
                     <label for="datePicker">
                         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -595,7 +627,7 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" id="searchInput" placeholder="Buscar por código, fecha o usuario...">
+                <input type="text" id="searchInput" placeholder="Buscar por código, aplicación o generado por...">
                 <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
             </div>
             <div class="action-buttons">
@@ -633,7 +665,7 @@
                     <tr>
                         <th>#</th>
                         <th>Código NEU</th>
-                        <th>Fecha del Código</th>
+                        <th>Aplicación</th>
                         <th>Generado por</th>
                         <th>Fecha de Generación</th>
                         <th>Acciones</th>
@@ -667,6 +699,7 @@
         import { initializeApp } from "firebase/app";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, where, Timestamp } from "firebase/firestore";
         import { getAuth, signInAnonymously, onAuthStateChanged } from "firebase/auth";
+        
         const firebaseConfig = {
             apiKey: "AIzaSyDBdql3VerCJwgsz1H3ikxt23MffcCUZj0",
             authDomain: "generadorneu.firebaseapp.com",
@@ -686,6 +719,7 @@
         const itemsPerPage = 10;
         let currentSearch = '';
         let currentFilter = 'all'; 
+        
         const elements = {
             generateBtn: document.getElementById('generateBtn'),
             refreshBtn: document.getElementById('refreshBtn'),
@@ -698,6 +732,9 @@
             prevPage: document.getElementById('prevPage'),
             nextPage: document.getElementById('nextPage'),
             datePicker: document.getElementById('datePicker'),
+            firstName: document.getElementById('firstName'),
+            lastName: document.getElementById('lastName'),
+            appName: document.getElementById('appName'),
             tableBody: document.getElementById('tableBody'),
             totalCodes: document.getElementById('totalCodes'),
             todayCodes: document.getElementById('todayCodes'),
@@ -753,12 +790,16 @@
             return result;
         }
 
-        function generateNEUCode(date) {
+        // Nueva función: genera código con iniciales de nombre y apellido
+        function generateNEUCodeWithInitials(date, firstName, lastName) {
             const year = date.getFullYear().toString().slice(-2);
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
             const randomLetters = generateRandomLetters();
-            return `${year}${month}${day}_${randomLetters}`;
+            // Tomar primera letra del nombre y apellido (mayúsculas)
+            const nameInitial = firstName && firstName.trim() ? firstName.trim()[0].toUpperCase() : 'X';
+            const lastInitial = lastName && lastName.trim() ? lastName.trim()[0].toUpperCase() : 'X';
+            return `${year}${month}${day}_${randomLetters}-${nameInitial}${lastInitial}`;
         }
 
         async function codeExists(code) {
@@ -779,17 +820,31 @@
                 return;
             }
             
+            const firstName = elements.firstName.value.trim();
+            const lastName = elements.lastName.value.trim();
+            const appName = elements.appName.value.trim();
+            
+            if (!firstName || !lastName) {
+                showNotification('Por favor, ingresa tu nombre y apellido', 'warning');
+                return;
+            }
+            
+            if (!appName) {
+                showNotification('Por favor, ingresa el nombre de la aplicación', 'warning');
+                return;
+            }
+            
             let selectedDate = elements.datePicker.value ? new Date(elements.datePicker.value) : new Date();
             if (elements.datePicker.value) {
                 selectedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
             }
             
-            let code = generateNEUCode(selectedDate);
+            let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName);
             let attempts = 0;
             const maxAttempts = 5;
             
             while (await codeExists(code) && attempts < maxAttempts) {
-                code = generateNEUCode(selectedDate);
+                code = generateNEUCodeWithInitials(selectedDate, firstName, lastName);
                 attempts++;
             }
             
@@ -802,15 +857,22 @@
             
             try {
                 const codesRef = collection(db, 'neu_codes');
+                // Guardamos los nuevos campos: appName, fullName (nombre completo del generador)
+                const fullName = `${firstName} ${lastName}`;
                 await addDoc(codesRef, {
                     code: code,
-                    codeDate: Timestamp.fromDate(selectedDate),
+                    appName: appName,
+                    generatedBy: fullName,
                     createdAt: Timestamp.fromDate(new Date()),
                     userId: currentUser.uid,
                     userEmail: currentUser.email || 'Usuario Anónimo'
                 });
                 
                 showNotification(`✅ Código generado: ${code}`, 'success');
+                // Limpiar campos después de generar
+                elements.firstName.value = '';
+                elements.lastName.value = '';
+                elements.appName.value = '';
                 elements.datePicker.value = '';
                 await loadCodes();
                 
@@ -886,7 +948,8 @@
                     allCodes.push({
                         id: doc.id,
                         code: data.code,
-                        codeDate: data.codeDate.toDate(),
+                        appName: data.appName || 'Sin especificar',
+                        generatedBy: data.generatedBy || data.userEmail || 'Anónimo',
                         createdAt: data.createdAt.toDate(),
                         userId: data.userId,
                         userEmail: data.userEmail || 'Anónimo'
@@ -931,8 +994,8 @@
                 const searchTerm = currentSearch.toLowerCase();
                 filtered = filtered.filter(code => 
                     code.code.toLowerCase().includes(searchTerm) ||
-                    formatDate(code.codeDate).toLowerCase().includes(searchTerm) ||
-                    code.userEmail.toLowerCase().includes(searchTerm)
+                    code.appName.toLowerCase().includes(searchTerm) ||
+                    code.generatedBy.toLowerCase().includes(searchTerm)
                 );
             }
             
@@ -965,16 +1028,9 @@
                 return `
                     <tr>
                         <td>${start + index + 1}</td>
-                        <td>
-                            <strong style="color: #003366; font-family: monospace; font-size: 1.1rem;">${code.code}</strong>
-                        </td>
-                        <td>${formatDate(code.codeDate)}</td>
-                        <td>
-                            <span class="user-badge ${isOwner ? 'owner' : ''}">
-                                ${code.userEmail === 'Usuario Anónimo' ? '👤 Anónimo' : `👤 ${code.userEmail}`}
-                                ${isOwner ? ' (Tú)' : ''}
-                            </span>
-                        </td>
+                        <td><strong style="color: #003366; font-family: monospace; font-size: 1.1rem;">${code.code}</strong></td>
+                        <td>${escapeHtml(code.appName)}</td>
+                        <td><span class="user-badge ${isOwner ? 'owner' : ''}">${escapeHtml(code.generatedBy)}${isOwner ? ' (Tú)' : ''}</span></td>
                         <td>${formatDateTime(code.createdAt)}</td>
                         <td>
                             <button class="copy-btn" onclick="window.copyToClipboard('${code.code}')">📋 Copiar</button>
@@ -987,6 +1043,19 @@
             elements.prevPage.disabled = currentPage === 1;
             elements.nextPage.disabled = currentPage === totalPages;
             document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+        }
+        
+        // Helper para escapar HTML y evitar inyección
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
         }
 
         async function initAuth() {
@@ -1077,8 +1146,8 @@
             const exportData = filteredCodes.map((code, index) => ({
                 '#': index + 1,
                 'Código NEU': code.code,
-                'Fecha del Código': formatDate(code.codeDate),
-                'Generado por': code.userEmail,
+                'Aplicación': code.appName,
+                'Generado por': code.generatedBy,
                 'Fecha de Generación': formatDateTime(code.createdAt)
             }));
             
