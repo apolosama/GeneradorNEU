@@ -577,7 +577,12 @@
                 <div class="form-group">
                     <label for="appName">Aplicación</label>
                     <input type="text" id="appName" placeholder="Nombre de la aplicación" maxlength="100">
-                    <small>Ej: Sistema Ventas, App Móvil, Dashboard, etc.</small>
+                    <small>Ej: Fondo rotativo, Caja chica, Bajas, etc.</small>
+                </div>
+                 <div class="form-group">
+                    <label for="estacion">Subestación</label>
+                    <input type="text" id="estacion" placeholder="Número de la subestación" maxlength="100">
+                    <small>Ej: 19, 25, 03, etc.</small>
                 </div>
                 <div class="form-group">
                     <label for="datePicker">
@@ -735,6 +740,7 @@
             firstName: document.getElementById('firstName'),
             lastName: document.getElementById('lastName'),
             appName: document.getElementById('appName'),
+            estacion: document.getElementById('estacion'),
             tableBody: document.getElementById('tableBody'),
             totalCodes: document.getElementById('totalCodes'),
             todayCodes: document.getElementById('todayCodes'),
@@ -791,15 +797,16 @@
         }
 
         // Nueva función: genera código con iniciales de nombre y apellido
-        function generateNEUCodeWithInitials(date, firstName, lastName) {
+        function generateNEUCodeWithInitials(date, firstName, lastName,estacion) {
             const year = date.getFullYear().toString().slice(-2);
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
-            const randomLetters = generateRandomLetters();
+            //const randomLetters = generateRandomLetters();
             // Tomar primera letra del nombre y apellido (mayúsculas)
             const nameInitial = firstName && firstName.trim() ? firstName.trim()[0].toUpperCase() : 'X';
             const lastInitial = lastName && lastName.trim() ? lastName.trim()[0].toUpperCase() : 'X';
-            return `${year}${month}${day}-${randomLetters}-${nameInitial}${lastInitial}`;
+            const numeroEstacion = estacion && estacion.trim() ? estacion.trim() : '00';
+            return `${year}${month}${day}-SE${numeroEstacion}-${nameInitial}${lastInitial}`;
         }
 
         async function codeExists(code) {
@@ -819,7 +826,11 @@
                 showNotification('Esperando conexión con Firebase...', 'warning');
                 return;
             }
-            
+            const estacionValue = elements.estacion.value.trim();
+            if (!estacionValue) {
+                showNotification('Por favor, ingresa el número de la subestación', 'warning');
+                return;
+            }
             const firstName = elements.firstName.value.trim();
             const lastName = elements.lastName.value.trim();
             const appName = elements.appName.value.trim();
@@ -839,12 +850,12 @@
                 selectedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
             }
             
-            let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName);
+            let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName,estacionValue);
             let attempts = 0;
             const maxAttempts = 5;
             
             while (await codeExists(code) && attempts < maxAttempts) {
-                code = generateNEUCodeWithInitials(selectedDate, firstName, lastName);
+                code = generateNEUCodeWithInitials(selectedDate, firstName, lastName,estacionValue);
                 attempts++;
             }
             
