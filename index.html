@@ -155,8 +155,7 @@
             color: #6c757d;
             font-size: 0.8rem;
         }
-        
-        /* Two columns for name fields */
+
         .name-row {
             display: flex;
             gap: 15px;
@@ -563,7 +562,6 @@
         <div class="control-panel">
             <div class="generator-section">
                 <h2>Generar Nuevo Código</h2>
-                <!-- Nuevos campos: Nombre, Apellido y Aplicación -->
                 <div class="name-row">
                     <div class="form-group">
                         <label for="firstName">Nombre</label>
@@ -575,8 +573,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="appName">Aplicación</label>
-                    <input type="text" id="appName" placeholder="Nombre de la aplicación" maxlength="100">
+                    <label for="appName">Documento en el cual se usara</label>
+                    <input type="text" id="appName" placeholder="Nombre documento" maxlength="100">
                     <small>Ej: Fondo rotativo, Caja chica, Bajas, etc.</small>
                 </div>
                  <div class="form-group">
@@ -796,13 +794,10 @@
             return result;
         }
 
-        // Nueva función: genera código con iniciales de nombre y apellido
         function generateNEUCodeWithInitials(date, firstName, lastName,estacion) {
             const year = date.getFullYear().toString().slice(-2);
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
-            //const randomLetters = generateRandomLetters();
-            // Tomar primera letra del nombre y apellido (mayúsculas)
             const nameInitial = firstName && firstName.trim() ? firstName.trim()[0].toUpperCase() : 'X';
             const lastInitial = lastName && lastName.trim() ? lastName.trim()[0].toUpperCase() : 'X';
             const numeroEstacion = estacion && estacion.trim() ? estacion.trim() : '00';
@@ -868,7 +863,6 @@
             
             try {
                 const codesRef = collection(db, 'neu_codes');
-                // Guardamos los nuevos campos: appName, fullName (nombre completo del generador)
                 const fullName = `${firstName} ${lastName}`;
                 await addDoc(codesRef, {
                     code: code,
@@ -879,8 +873,7 @@
                     userEmail: currentUser.email || 'Usuario Anónimo'
                 });
                 
-                showNotification(`✅ Código generado: ${code}`, 'success');
-                // Limpiar campos después de generar
+                showNotification(`Código generado: ${code}`, 'success');
                 elements.firstName.value = '';
                 elements.lastName.value = '';
                 elements.appName.value = '';
@@ -901,7 +894,7 @@
                     showLoading(true);
                     try {
                         await deleteDoc(doc(db, 'neu_codes', id));
-                        showNotification('🗑️ Código eliminado correctamente', 'success');
+                        showNotification('Código eliminado correctamente', 'success');
                         await loadCodes();
                     } catch (error) {
                         console.error('Error al eliminar:', error);
@@ -928,13 +921,13 @@
                 return;
             }
             
-            if (confirm(`⚠️ ¿Estás seguro? Esto eliminará TODOS TUS ${myCodes.length} códigos. Esta acción no se puede deshacer.`)) {
+            if (confirm(`¿Estás seguro? Esto eliminará TODOS TUS ${myCodes.length} códigos. Esta acción no se puede deshacer.`)) {
                 showLoading(true);
                 try {
                     for (const code of myCodes) {
                         await deleteDoc(doc(db, 'neu_codes', code.id));
                     }
-                    showNotification(`🗑️ Eliminados ${myCodes.length} códigos`, 'success');
+                    showNotification(`Eliminados ${myCodes.length} códigos`, 'success');
                     await loadCodes();
                 } catch (error) {
                     console.error('Error al limpiar historial:', error);
@@ -1056,7 +1049,6 @@
             document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
         }
         
-        // Helper para escapar HTML y evitar inyección
         function escapeHtml(str) {
             if (!str) return '';
             return str.replace(/[&<>]/g, function(m) {
@@ -1150,7 +1142,7 @@
             const filteredCodes = getFilteredCodes();
             
             if (filteredCodes.length === 0) {
-                showNotification('⚠️ No hay datos para exportar', 'warning');
+                showNotification('No hay datos para exportar', 'warning');
                 return;
             }
             
@@ -1169,14 +1161,14 @@
             const filterType = currentFilter === 'myCodes' ? 'mis_codigos' : 'todos';
             const fileName = `NEU_codes_${filterType}_${new Date().toISOString().slice(0,19)}.xlsx`;
             XLSX.writeFile(wb, fileName);
-            showNotification(`📊 Exportados ${filteredCodes.length} códigos a Excel`, 'success');
+            showNotification(`Exportados ${filteredCodes.length} códigos a Excel`, 'success');
         };
 
         window.copyToClipboard = function(code) {
             navigator.clipboard.writeText(code).then(() => {
-                showNotification(`📋 Código "${code}" copiado al portapapeles`, 'success');
+                showNotification(`Código "${code}" copiado al portapapeles`, 'success');
             }).catch(() => {
-                showNotification('❌ Error al copiar el código', 'error');
+                showNotification('Error al copiar el código', 'error');
             });
         };
 
