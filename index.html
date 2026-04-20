@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> 
     
     <style>
+        /* Todos los estilos existentes se mantienen igual */
         * {
             margin: 0;
             padding: 0;
@@ -384,7 +385,7 @@
             color: #003366;
             font-weight: 500;
         }
-        .copy-btn, .delete-btn {
+        .copy-btn, .delete-btn, .subcode-btn, .view-subcodes-btn {
             padding: 5px 10px;
             margin: 0 3px;
             border: none;
@@ -411,6 +412,149 @@
         .delete-btn:hover {
             background: #c82333;
         }
+
+        .subcode-btn {
+            background: #0066CC;
+            color: white;
+        }
+
+        .subcode-btn:hover {
+            background: #0052a3;
+        }
+
+        .view-subcodes-btn {
+            background: #6c757d;
+            color: white;
+        }
+
+        .view-subcodes-btn:hover {
+            background: #5a6268;
+        }
+
+        .subcodes-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .subcode-item {
+            background: white;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border-left: 3px solid #0066CC;
+        }
+
+        .subcode-description {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #003366;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .subcode-badge {
+            display: inline-block;
+            background: #0066CC;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 5px;
+        }
+
+        .subcode-row {
+            background: #f8f9fa;
+        }
+
+        .subcode-indent {
+            padding-left: 40px !important;
+        }
+
+        .expand-icon {
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
         .loading-spinner {
             position: absolute;
             top: 50%;
@@ -666,6 +810,7 @@
             <table id="codesTable">
                 <thead>
                     <tr>
+                        <th style="width: 30px;"></th>
                         <th>#</th>
                         <th>Código NEU</th>
                         <th>Aplicación</th>
@@ -676,7 +821,7 @@
                 </thead>
                 <tbody id="tableBody">
                     <tr class="empty-row">
-                        <td colspan="6">Conectando con Firebase...</td>
+                        <td colspan="7">Conectando con Firebase...</td>
                     </tr>
                 </tbody>
             </table>
@@ -688,6 +833,32 @@
         </div>
         <div id="notification" class="notification"></div>
     </div>
+
+    <!-- Modal para crear subcódigo -->
+    <div id="subcodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Agregar Subcódigo</h3>
+                <span class="close" onclick="window.closeSubcodeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="subcodeName">Nombre del Subcódigo</label>
+                    <input type="text" id="subcodeName" placeholder="Ej: Subproyecto A" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="subcodeDescription">Descripción</label>
+                    <textarea id="subcodeDescription" placeholder="Describe el propósito o detalles de este subcódigo..."></textarea>
+                    <small>Opcional: Agrega una descripción para identificar este subcódigo</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="window.closeSubcodeModal()">Cancelar</button>
+                <button class="btn-primary" id="saveSubcodeBtn">Guardar Subcódigo</button>
+            </div>
+        </div>
+    </div>
+
     <script type="importmap">
         {
             "imports": {
@@ -718,10 +889,13 @@
         const auth = getAuth(app);
         let currentUser = null;
         let allCodes = [];
+        let allSubcodes = [];
         let currentPage = 1;
         const itemsPerPage = 10;
         let currentSearch = '';
-        let currentFilter = 'all'; 
+        let currentFilter = 'all';
+        let currentParentCodeId = null;
+        let expandedRows = new Set();
         
         const elements = {
             generateBtn: document.getElementById('generateBtn'),
@@ -746,7 +920,12 @@
             statusText: document.getElementById('statusText'),
             statusIndicator: document.querySelector('.status-indicator'),
             loadingSpinner: document.getElementById('loadingSpinner'),
-            notification: document.getElementById('notification')
+            notification: document.getElementById('notification'),
+            subcodeModal: document.getElementById('subcodeModal'),
+            subcodeName: document.getElementById('subcodeName'),
+            subcodeDescription: document.getElementById('subcodeDescription'),
+            saveSubcodeBtn: document.getElementById('saveSubcodeBtn'),
+            modalTitle: document.getElementById('modalTitle')
         };
 
         function showNotification(message, type = 'success') {
@@ -794,7 +973,7 @@
             return result;
         }
 
-        function generateNEUCodeWithInitials(date, firstName, lastName,estacion) {
+        function generateNEUCodeWithInitials(date, firstName, lastName, estacion) {
             const year = date.getFullYear().toString().slice(-2);
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
@@ -845,12 +1024,12 @@
                 selectedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
             }
             
-            let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName,estacionValue);
+            let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName, estacionValue);
             let attempts = 0;
             const maxAttempts = 5;
             
             while (await codeExists(code) && attempts < maxAttempts) {
-                code = generateNEUCodeWithInitials(selectedDate, firstName, lastName,estacionValue);
+                code = generateNEUCodeWithInitials(selectedDate, firstName, lastName, estacionValue);
                 attempts++;
             }
             
@@ -890,11 +1069,21 @@
 
         async function deleteCode(id, userId) {
             if (currentFilter === 'myCodes' || userId === currentUser?.uid) {
-                if (confirm('¿Estás seguro de que quieres eliminar este código?')) {
+                if (confirm('¿Estás seguro de que quieres eliminar este código? Esto también eliminará todos sus subcódigos.')) {
                     showLoading(true);
                     try {
+                        // Eliminar subcódigos primero
+                        const subcodesRef = collection(db, 'subcodes');
+                        const q = query(subcodesRef, where('parentCodeId', '==', id));
+                        const querySnapshot = await getDocs(q);
+                        
+                        for (const doc of querySnapshot.docs) {
+                            await deleteDoc(doc.ref);
+                        }
+                        
+                        // Eliminar código principal
                         await deleteDoc(doc(db, 'neu_codes', id));
-                        showNotification('Código eliminado correctamente', 'success');
+                        showNotification('Código y subcódigos eliminados correctamente', 'success');
                         await loadCodes();
                     } catch (error) {
                         console.error('Error al eliminar:', error);
@@ -921,13 +1110,23 @@
                 return;
             }
             
-            if (confirm(`¿Estás seguro? Esto eliminará TODOS TUS ${myCodes.length} códigos. Esta acción no se puede deshacer.`)) {
+            if (confirm(`¿Estás seguro? Esto eliminará TODOS TUS ${myCodes.length} códigos y sus subcódigos. Esta acción no se puede deshacer.`)) {
                 showLoading(true);
                 try {
                     for (const code of myCodes) {
+                        // Eliminar subcódigos
+                        const subcodesRef = collection(db, 'subcodes');
+                        const q = query(subcodesRef, where('parentCodeId', '==', code.id));
+                        const querySnapshot = await getDocs(q);
+                        
+                        for (const doc of querySnapshot.docs) {
+                            await deleteDoc(doc.ref);
+                        }
+                        
+                        // Eliminar código
                         await deleteDoc(doc(db, 'neu_codes', code.id));
                     }
-                    showNotification(`Eliminados ${myCodes.length} códigos`, 'success');
+                    showNotification(`Eliminados ${myCodes.length} códigos y sus subcódigos`, 'success');
                     await loadCodes();
                 } catch (error) {
                     console.error('Error al limpiar historial:', error);
@@ -960,13 +1159,31 @@
                     });
                 });
                 
+                // Cargar subcódigos
+                const subcodesRef = collection(db, 'subcodes');
+                const subcodesQuery = query(subcodesRef, orderBy('createdAt', 'asc'));
+                const subcodesSnapshot = await getDocs(subcodesQuery);
+                
+                allSubcodes = [];
+                subcodesSnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    allSubcodes.push({
+                        id: doc.id,
+                        parentCodeId: data.parentCodeId,
+                        name: data.name,
+                        description: data.description || '',
+                        createdAt: data.createdAt.toDate(),
+                        userId: data.userId
+                    });
+                });
+                
                 updateStats();
                 renderTable();
                 
             } catch (error) {
                 console.error('Error al cargar códigos:', error);
                 showNotification('Error al cargar los códigos', 'error');
-                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="6">Error al cargar datos. Intenta refrescar.</td></tr>';
+                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">Error al cargar datos. Intenta refrescar.</td></tr>';
             } finally {
                 showLoading(false);
             }
@@ -1020,29 +1237,70 @@
             const pageCodes = filteredCodes.slice(start, end);
             
             if (pageCodes.length === 0) {
-                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="6">No hay códigos que coincidan con la búsqueda</td></tr>';
+                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">No hay códigos que coincidan con la búsqueda</td></tr>';
                 elements.prevPage.disabled = true;
                 elements.nextPage.disabled = true;
                 document.getElementById('pageInfo').textContent = 'Página 0 de 0';
                 return;
             }
             
-            elements.tableBody.innerHTML = pageCodes.map((code, index) => {
+            let html = '';
+            let rowNumber = start + 1;
+            
+            pageCodes.forEach((code) => {
                 const isOwner = currentUser && code.userId === currentUser.uid;
-                return `
+                const subcodes = allSubcodes.filter(s => s.parentCodeId === code.id);
+                const isExpanded = expandedRows.has(code.id);
+                
+                html += `
                     <tr>
-                        <td>${start + index + 1}</td>
-                        <td><strong style="color: #003366; font-family: monospace; font-size: 1.1rem;">${code.code}</strong></td>
+                        <td>
+                            ${subcodes.length > 0 ? 
+                                `<span class="expand-icon" onclick="window.toggleExpand('${code.id}')">${isExpanded ? '▼' : '▶'}</span>` : 
+                                ''}
+                        </td>
+                        <td>${rowNumber++}</td>
+                        <td>
+                            <strong style="color: #003366; font-family: monospace; font-size: 1.1rem;">${code.code}</strong>
+                            ${subcodes.length > 0 ? `<span class="subcode-badge">${subcodes.length} subcódigo${subcodes.length !== 1 ? 's' : ''}</span>` : ''}
+                        </td>
                         <td>${escapeHtml(code.appName)}</td>
                         <td><span class="user-badge ${isOwner ? 'owner' : ''}">${escapeHtml(code.generatedBy)}${isOwner ? ' (Tú)' : ''}</span></td>
                         <td>${formatDateTime(code.createdAt)}</td>
                         <td>
                             <button class="copy-btn" onclick="window.copyToClipboard('${code.code}')">📋 Copiar</button>
+                            <button class="subcode-btn" onclick="window.openSubcodeModal('${code.id}')">➕ Subcódigo</button>
                             ${isOwner ? `<button class="delete-btn" onclick="window.deleteCodeById('${code.id}', '${code.userId}')">🗑️ Eliminar</button>` : ''}
                         </td>
                     </tr>
                 `;
-            }).join('');
+                
+                if (isExpanded && subcodes.length > 0) {
+                    subcodes.forEach((subcode, index) => {
+                        html += `
+                            <tr class="subcode-row">
+                                <td></td>
+                                <td class="subcode-indent"></td>
+                                <td class="subcode-indent">
+                                    <span style="color: #0066CC;">↳ ${escapeHtml(subcode.name)}</span>
+                                </td>
+                                <td class="subcode-indent" colspan="3">
+                                    <div class="subcode-description">
+                                        ${escapeHtml(subcode.description) || '<em>Sin descripción</em>'}
+                                    </div>
+                                </td>
+                                <td>
+                                    ${subcode.userId === currentUser?.uid ? 
+                                        `<button class="delete-btn" onclick="window.deleteSubcodeById('${subcode.id}')">🗑️</button>` : 
+                                        ''}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+            });
+            
+            elements.tableBody.innerHTML = html;
             
             elements.prevPage.disabled = currentPage === 1;
             elements.nextPage.disabled = currentPage === totalPages;
@@ -1129,6 +1387,8 @@
                 }
             });
             
+            elements.saveSubcodeBtn.addEventListener('click', saveSubcode);
+            
             document.addEventListener('keypress', (e) => {
                 if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
                     if (e.key === 'Enter') {
@@ -1136,6 +1396,67 @@
                     }
                 }
             });
+            
+            // Cerrar modal al hacer clic fuera
+            window.onclick = function(event) {
+                if (event.target === elements.subcodeModal) {
+                    closeSubcodeModal();
+                }
+            }
+        }
+
+        async function saveSubcode() {
+            const name = elements.subcodeName.value.trim();
+            const description = elements.subcodeDescription.value.trim();
+            
+            if (!name) {
+                showNotification('Por favor, ingresa un nombre para el subcódigo', 'warning');
+                return;
+            }
+            
+            if (!currentParentCodeId) {
+                showNotification('Error: No se ha seleccionado un código padre', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const subcodesRef = collection(db, 'subcodes');
+                await addDoc(subcodesRef, {
+                    parentCodeId: currentParentCodeId,
+                    name: name,
+                    description: description,
+                    createdAt: Timestamp.fromDate(new Date()),
+                    userId: currentUser.uid
+                });
+                
+                showNotification('Subcódigo creado correctamente', 'success');
+                closeSubcodeModal();
+                await loadCodes();
+                
+            } catch (error) {
+                console.error('Error al guardar subcódigo:', error);
+                showNotification('Error al guardar el subcódigo', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function deleteSubcode(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este subcódigo?')) {
+                showLoading(true);
+                try {
+                    await deleteDoc(doc(db, 'subcodes', id));
+                    showNotification('Subcódigo eliminado correctamente', 'success');
+                    await loadCodes();
+                } catch (error) {
+                    console.error('Error al eliminar subcódigo:', error);
+                    showNotification('Error al eliminar el subcódigo', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
         }
 
         window.exportToExcel = function() {
@@ -1146,13 +1467,31 @@
                 return;
             }
             
-            const exportData = filteredCodes.map((code, index) => ({
-                '#': index + 1,
-                'Código NEU': code.code,
-                'Aplicación': code.appName,
-                'Generado por': code.generatedBy,
-                'Fecha de Generación': formatDateTime(code.createdAt)
-            }));
+            const exportData = [];
+            let index = 1;
+            
+            filteredCodes.forEach((code) => {
+                exportData.push({
+                    '#': index++,
+                    'Código NEU': code.code,
+                    'Aplicación': code.appName,
+                    'Generado por': code.generatedBy,
+                    'Fecha de Generación': formatDateTime(code.createdAt),
+                    'Tipo': 'Principal'
+                });
+                
+                const subcodes = allSubcodes.filter(s => s.parentCodeId === code.id);
+                subcodes.forEach((subcode) => {
+                    exportData.push({
+                        '#': '',
+                        'Código NEU': `↳ ${subcode.name}`,
+                        'Aplicación': subcode.description || 'Sin descripción',
+                        'Generado por': '',
+                        'Fecha de Generación': formatDateTime(subcode.createdAt),
+                        'Tipo': 'Subcódigo'
+                    });
+                });
+            });
             
             const ws = XLSX.utils.json_to_sheet(exportData);
             const wb = XLSX.utils.book_new();
@@ -1174,6 +1513,32 @@
 
         window.deleteCodeById = function(id, userId) {
             deleteCode(id, userId);
+        };
+
+        window.openSubcodeModal = function(parentCodeId) {
+            currentParentCodeId = parentCodeId;
+            elements.subcodeName.value = '';
+            elements.subcodeDescription.value = '';
+            elements.modalTitle.textContent = 'Agregar Subcódigo';
+            elements.subcodeModal.style.display = 'block';
+        };
+
+        window.closeSubcodeModal = function() {
+            elements.subcodeModal.style.display = 'none';
+            currentParentCodeId = null;
+        };
+
+        window.toggleExpand = function(codeId) {
+            if (expandedRows.has(codeId)) {
+                expandedRows.delete(codeId);
+            } else {
+                expandedRows.add(codeId);
+            }
+            renderTable();
+        };
+
+        window.deleteSubcodeById = function(id) {
+            deleteSubcode(id);
         };
 
         setupEventListeners();
