@@ -7,7 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> 
     
     <style>
-        /* Todos los estilos existentes se mantienen igual */
         * {
             margin: 0;
             padding: 0;
@@ -1141,6 +1140,7 @@
             showLoading(true);
             
             try {
+                // Cargar códigos principales
                 const codesRef = collection(db, 'neu_codes');
                 const q = query(codesRef, orderBy('createdAt', 'desc'));
                 const querySnapshot = await getDocs(q);
@@ -1159,10 +1159,9 @@
                     });
                 });
                 
-                // Cargar subcódigos
+                // Cargar subcódigos sin ordenar por createdAt para evitar el error de índice
                 const subcodesRef = collection(db, 'subcodes');
-                const subcodesQuery = query(subcodesRef, orderBy('createdAt', 'asc'));
-                const subcodesSnapshot = await getDocs(subcodesQuery);
+                const subcodesSnapshot = await getDocs(subcodesRef);
                 
                 allSubcodes = [];
                 subcodesSnapshot.forEach((doc) => {
@@ -1172,17 +1171,20 @@
                         parentCodeId: data.parentCodeId,
                         name: data.name,
                         description: data.description || '',
-                        createdAt: data.createdAt.toDate(),
+                        createdAt: data.createdAt?.toDate() || new Date(),
                         userId: data.userId
                     });
                 });
+                
+                // Ordenar subcódigos manualmente por fecha
+                allSubcodes.sort((a, b) => a.createdAt - b.createdAt);
                 
                 updateStats();
                 renderTable();
                 
             } catch (error) {
                 console.error('Error al cargar códigos:', error);
-                showNotification('Error al cargar los códigos', 'error');
+                showNotification('Error al cargar los códigos. Revisa la consola para más detalles.', 'error');
                 elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">Error al cargar datos. Intenta refrescar.</td></tr>';
             } finally {
                 showLoading(false);
