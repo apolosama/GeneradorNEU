@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> 
     
     <style>
+        /* [Todos los estilos se mantienen igual] */
         * {
             margin: 0;
             padding: 0;
@@ -45,7 +46,7 @@
         .header {
             background: linear-gradient(135deg, #003366 0%, #0066CC 100%);
             color: white;
-            padding: 25px 30px;
+            padding: 30px;
             text-align: center;
         }
 
@@ -53,20 +54,18 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             margin-bottom: 10px;
-            flex-wrap: wrap;
         }
 
         .logo-icon {
-            width: 75px;
-            height: 75px;
-            object-fit: contain;
-            background: transparent;
+            width: 50px;
+            height: 50px;
+            filter: brightness(0) invert(1);
         }
 
         .header h1 {
-            font-size: 1.9rem;
+            font-size: 2rem;
             margin: 0;
             font-weight: 600;
         }
@@ -76,10 +75,10 @@
             align-items: center;
             gap: 8px;
             background: rgba(255,255,255,0.2);
-            padding: 5px 15px;
+            padding: 5px 12px;
             border-radius: 20px;
-            margin-top: 8px;
-            font-size: 0.85rem;
+            margin-top: 10px;
+            font-size: 0.8rem;
         }
 
         .status-indicator {
@@ -105,7 +104,6 @@
             50% { opacity: 0.5; transform: scale(0.8); }
             100% { opacity: 1; transform: scale(1); }
         }
-
         .control-panel {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -120,4 +118,1447 @@
             margin-bottom: 15px;
             font-size: 1.3rem;
             border-left: 4px solid #FFB81C;
-            padding-left
+            padding-left: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #495057;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            max-width: 350px;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #0066CC;
+            box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 5px;
+            color: #6c757d;
+            font-size: 0.8rem;
+        }
+
+        .name-row {
+            display: flex;
+            gap: 15px;
+            max-width: 350px;
+        }
+        .name-row .form-group {
+            flex: 1;
+            margin-bottom: 0;
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 120px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-top: 3px solid #FFB81C;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
+        }
+        .btn-primary, .btn-secondary, .btn-danger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #003366 0%, #0066CC 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 51, 102, 0.4);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+            transform: translateY(-2px);
+        }
+
+        .icon {
+            width: 18px;
+            height: 18px;
+        }
+        .filter-section {
+            padding: 15px 30px;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-btn {
+            padding: 8px 20px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .filter-btn:hover {
+            border-color: #0066CC;
+            color: #0066CC;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, #003366 0%, #0066CC 100%);
+            color: white;
+            border-color: transparent;
+        }
+        .search-actions {
+            padding: 20px 30px;
+            background: white;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: #6c757d;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 12px 12px 40px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: #0066CC;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #6c757d;
+            font-size: 1.2rem;
+            padding: 0 5px;
+        }
+
+        .clear-search:hover {
+            color: #dc3545;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .table-container {
+            position: relative;
+            overflow-x: auto;
+            padding: 0 30px 20px 30px;
+            min-height: 400px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        thead {
+            background: #F8F9FA;
+            border-bottom: 2px solid #dee2e6;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #003366;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        tbody tr:hover {
+            background: #F8F9FA;
+        }
+
+        .empty-row td {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+        }
+        .user-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            color: #495057;
+        }
+
+        .user-badge.owner {
+            background: #e3f2fd;
+            color: #003366;
+            font-weight: 500;
+        }
+        .copy-btn, .delete-btn, .subcode-btn {
+            padding: 5px 10px;
+            margin: 0 3px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn {
+            background: #28a745;
+            color: white;
+        }
+
+        .copy-btn:hover {
+            background: #218838;
+        }
+
+        .delete-btn {
+            background: #dc3545;
+            color: white;
+        }
+
+        .delete-btn:hover {
+            background: #c82333;
+        }
+
+        .subcode-btn {
+            background: #0066CC;
+            color: white;
+        }
+
+        .subcode-btn:hover {
+            background: #0052a3;
+        }
+
+        .subcode-badge {
+            display: inline-block;
+            background: #0066CC;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            margin-left: 5px;
+        }
+
+        .subcode-row {
+            background: #f8f9fa;
+        }
+
+        .subcode-indent {
+            padding-left: 40px !important;
+        }
+
+        .expand-icon {
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .expand-icon.expanded {
+            transform: rotate(90deg);
+        }
+
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #FFB81C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            padding: 20px 30px;
+            background: #F8F9FA;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .pagination button {
+            padding: 8px 16px;
+            border: 1px solid #dee2e6;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: #003366;
+            color: white;
+            border-color: #003366;
+        }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #pageInfo {
+            color: #495057;
+            font-weight: 500;
+        }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: #28a745;
+            color: white;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+
+        .notification.show {
+            opacity: 1;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #003366;
+            margin: 0;
+        }
+
+        .close {
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #000;
+        }
+
+        .modal-body textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .control-panel {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-section {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .stat-card {
+                min-width: 100px;
+                padding: 15px;
+            }
+            
+            .search-actions {
+                flex-direction: column;
+            }
+            
+            .action-buttons {
+                width: 100%;
+                justify-content: stretch;
+            }
+            
+            .action-buttons button {
+                flex: 1;
+            }
+            
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            
+            th, td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
+            
+            .filter-section {
+                padding: 10px 15px;
+            }
+            
+            .filter-btn {
+                padding: 6px 15px;
+                font-size: 0.85rem;
+            }
+            
+            .name-row {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    <path d="M12 7v10"/>
+                    <path d="M7 12h10"/>
+                </svg>
+                <h1>Generador Proyectos NEU DOMLS QUITO</h1>
+            </div>
+            <div id="userStatus" class="user-status">
+                <div class="status-indicator"></div>
+                <span id="statusText">Conectando...</span>
+            </div>
+        </div>
+        <div class="control-panel">
+            <div class="generator-section">
+                <h2>Generar Nuevo Código</h2>
+                <div class="name-row">
+                    <div class="form-group">
+                        <label for="firstName">Nombre</label>
+                        <input type="text" id="firstName" placeholder="Tu nombre" maxlength="50">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Apellido</label> 
+                        <input type="text" id="lastName" placeholder="Tu apellido" maxlength="50">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appName">Proyecto</label>
+                    <input type="text" id="appName" placeholder="Nombre del proyecto" maxlength="100">
+                    <small>Ej: Fondo rotativo, Caja chica, Bajas, etc.</small>
+                </div>
+                <div class="form-group">
+                    <label for="estacion">Subestación</label>
+                    <select id="estacion">
+                        <option value="">-- Selecciona una subestación --</option>
+                        <option value="01">S/E (01) Olímpico</option>
+                        <option value="02">S/E (02) Luluncoto</option>
+                        <option value="03">S/E (03) Barrio Nuevo</option>
+                        <option value="04">S/E (04) Chimbacalle</option>
+                        <option value="05">S/E (05) Chilibulo</option>
+                        <option value="06">S/E (06) Escuela Sucre</option>
+                        <option value="07">S/E (07) San Roque</option>
+                        <option value="08">S/E (08) La Marín</option>
+                        <option value="09">S/E (09) Miraflores</option>
+                        <option value="10">S/E (10) Diez Vieja</option>
+                        <option value="11">S/E (11) Belisario Quevedo</option>
+                        <option value="12">S/E (12) La Floresta</option>
+                        <option value="13">S/E (13) Granda Centeno</option>
+                        <option value="14">S/E (14) Gualo</option>
+                        <option value="15">S/E (15) El Bosque</option>
+                        <option value="16">S/E (16) Rio Coca</option>
+                        <option value="17">S/E (17) Andalucía</option>
+                        <option value="18">S/E (18) Cristiania</option>
+                        <option value="19">S/E (19) Cotocollao</option>
+                        <option value="20">S/E (20) Sur</option>
+                        <option value="21">S/E (21) Eplicachima</option>
+                        <option value="22">S/E (22) San Antonio</option>
+                        <option value="23">S/E (23) Conocoto</option>
+                        <option value="24">S/E (24) Carolina</option>
+                        <option value="25">S/E (25) San Pablo</option>
+                        <option value="26">S/E (26) Alangasi</option>
+                        <option value="27">S/E (27) San Rafael</option>
+                        <option value="28">S/E (28) Iñaquito</option>
+                        <option value="29">S/E (29) Nueva Cumbayá</option>
+                        <option value="30">S/E (30) Plataforma Financiera</option>
+                        <option value="31">S/E (31) Tababela</option>
+                        <option value="32">S/E (32) Diez Nueva</option>
+                        <option value="33">S/E (33) Nuevo Aeropuerto</option>
+                        <option value="36">S/E (36) Tumbaco</option>
+                        <option value="37">S/E (37) Santa Rosa</option>
+                        <option value="38">S/E (38) Norte</option>
+                        <option value="39">S/E (39) Vicentina</option>
+                        <option value="41">S/E (41) Selva Alegre</option>
+                        <option value="42">S/E (42) Móvil Papallacta</option>
+                        <option value="46">S/E (46) El Inga Bajo</option>
+                        <option value="48">S/E (48) Mirador Alto</option>
+                        <option value="49">S/E (49) Los Bancos</option>
+                        <option value="51">S/E (51) Bicentenario</option>
+                        <option value="53">S/E (53) Pérez Guerrero</option>
+                        <option value="55">S/E (55) Sangolquí</option>
+                        <option value="57">S/E (57) Pomasqui</option>
+                        <option value="58">S/E (58) El Quinche</option>
+                        <option value="59">S/E (59) Eugenio Espejo</option>
+                        <option value="63">S/E (63) Batán Alto</option>
+                        <option value="68">S/E (68) Labrador</option>
+                        <option value="70">S/E (70) Shelter T-GOOD</option>
+                        <option value="73">S/E (73) El Obraje</option>
+                        <option value="80">S/E (80) Cumbayá</option>
+                        <option value="81">S/E (81) Estación Terrena</option>
+                        <option value="82">S/E (82) Gualberto Hernández</option>
+                        <option value="84">S/E (84) Guangopolo Hidráulica</option>
+                        <option value="86">S/E (86) Nayón</option>
+                        <option value="88">S/E (88) Pasochoa</option>
+                    </select>
+                    <small>Selecciona la subestación correspondiente</small>
+                </div>
+                <div class="form-group">
+                    <label for="datePicker">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                        Fecha (opcional)
+                    </label>
+                    <input type="date" id="datePicker">
+                    <small>Si no seleccionas fecha, se usará la fecha actual</small>
+                </div>
+                <button id="generateBtn" class="btn-primary">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M21 12a9 9 0 11-9-9M12 6v6l4 2"/>
+                        <path d="M15 3h6v6"/>
+                    </svg>
+                    Generar Código NEU
+                </button>
+            </div>
+            <div class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCodes">0</div>
+                    <div class="stat-label">Códigos Generados</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="todayCodes">0</div>
+                    <div class="stat-label">Generados Hoy</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="userCodes">0</div>
+                    <div class="stat-label">Mis Códigos</div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-section">
+            <div class="filter-buttons">
+                <button id="filterAllBtn" class="filter-btn active">Todos</button>
+                <button id="filterMyCodesBtn" class="filter-btn">Mis Códigos</button>
+            </div>
+        </div>
+        <div class="search-actions">
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Buscar por código, aplicación o generado por...">
+                <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
+            </div>
+            <div class="action-buttons">
+                <button id="refreshBtn" class="btn-secondary">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                    </svg>
+                    Actualizar
+                </button>
+                <button id="exportExcelBtn" class="btn-secondary">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <line x1="9" y1="15" x2="15" y2="15"/>
+                    </svg>
+                    Exportar a Excel
+                </button>
+                <button id="clearHistoryBtn" class="btn-danger">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                    </svg>
+                    Limpiar Mis Códigos
+                </button>
+            </div>
+        </div>
+        <div class="table-container">
+            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                <div class="spinner"></div>
+                <p>Cargando códigos...</p>
+            </div>
+            <table id="codesTable">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;"></th>
+                        <th>#</th>
+                        <th>Código NEU</th>
+                        <th>Aplicación</th>
+                        <th>Generado por</th>
+                        <th>Fecha de Generación</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr class="empty-row">
+                        <td colspan="7">Conectando con Firebase...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="pagination" id="pagination">
+            <button id="prevPage" disabled>Anterior</button>
+            <span id="pageInfo">Página 1</span>
+            <button id="nextPage" disabled>Siguiente</button>
+        </div>
+        <div id="notification" class="notification"></div>
+    </div>
+
+    <!-- Modal para crear subcódigo -->
+    <div id="subcodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">Agregar Subcódigo</h3>
+                <span class="close" onclick="window.closeSubcodeModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="subcodeName">Nombre del Subcódigo</label>
+                    <input type="text" id="subcodeName" placeholder="Ej: Subproyecto A" maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label for="subcodeDescription">Descripción</label>
+                    <textarea id="subcodeDescription" placeholder="Describe el propósito o detalles de este subcódigo..."></textarea>
+                    <small>Opcional: Agrega una descripción para identificar este subcódigo</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="window.closeSubcodeModal()">Cancelar</button>
+                <button class="btn-primary" id="saveSubcodeBtn">Guardar Subcódigo</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "firebase/app": "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js",
+                "firebase/firestore": "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js",
+                "firebase/auth": "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "firebase/app";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, where, Timestamp } from "firebase/firestore";
+        import { getAuth, signInAnonymously } from "firebase/auth";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyDBdql3VerCJwgsz1H3ikxt23MffcCUZj0",
+            authDomain: "generadorneu.firebaseapp.com",
+            projectId: "generadorneu",
+            storageBucket: "generadorneu.firebasestorage.app",
+            messagingSenderId: "358064756986",
+            appId: "1:358064756986:web:a126bbd429f2baa6fc9143",
+            measurementId: "G-HLBGVJTTWG"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        let currentUser = null;
+        let allCodes = [];
+        let allSubcodes = [];
+        let currentPage = 1;
+        const itemsPerPage = 10;
+        let currentSearch = '';
+        let currentFilter = 'all';
+        let currentParentCodeId = null;
+        let expandedRows = new Set();
+        
+        const elements = {
+            generateBtn: document.getElementById('generateBtn'),
+            refreshBtn: document.getElementById('refreshBtn'),
+            searchInput: document.getElementById('searchInput'),
+            clearSearch: document.getElementById('clearSearch'),
+            filterAllBtn: document.getElementById('filterAllBtn'),
+            filterMyCodesBtn: document.getElementById('filterMyCodesBtn'),
+            exportExcelBtn: document.getElementById('exportExcelBtn'),
+            clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+            prevPage: document.getElementById('prevPage'),
+            nextPage: document.getElementById('nextPage'),
+            datePicker: document.getElementById('datePicker'),
+            firstName: document.getElementById('firstName'),
+            lastName: document.getElementById('lastName'),
+            appName: document.getElementById('appName'),
+            estacion: document.getElementById('estacion'),
+            tableBody: document.getElementById('tableBody'),
+            totalCodes: document.getElementById('totalCodes'),
+            todayCodes: document.getElementById('todayCodes'),
+            userCodes: document.getElementById('userCodes'),
+            statusText: document.getElementById('statusText'),
+            statusIndicator: document.querySelector('.status-indicator'),
+            loadingSpinner: document.getElementById('loadingSpinner'),
+            notification: document.getElementById('notification'),
+            subcodeModal: document.getElementById('subcodeModal'),
+            subcodeName: document.getElementById('subcodeName'),
+            subcodeDescription: document.getElementById('subcodeDescription'),
+            saveSubcodeBtn: document.getElementById('saveSubcodeBtn'),
+            modalTitle: document.getElementById('modalTitle')
+        };
+
+        function showNotification(message, type = 'success') {
+            elements.notification.textContent = message;
+            elements.notification.style.backgroundColor = type === 'success' ? '#28a745' : type === 'warning' ? '#FFB81C' : '#dc3545';
+            elements.notification.style.color = type === 'warning' ? '#000' : '#fff';
+            elements.notification.classList.add('show');
+            setTimeout(() => {
+                elements.notification.classList.remove('show');
+            }, 3000);
+        }
+
+        function showLoading(show) {
+            elements.loadingSpinner.style.display = show ? 'flex' : 'none';
+            const table = document.getElementById('codesTable');
+            if (table) table.style.opacity = show ? '0.5' : '1';
+        }
+
+        function formatDateTime(date) {
+            if (!date) return 'Fecha inválida';
+            return date.toLocaleString('es-ES', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        function generateNEUCodeWithInitials(date, firstName, lastName, estacion) {
+            const year = date.getFullYear().toString().slice(-2);
+            const month = (date.getMonth() + 1).toString().padStart(2, '0');
+            const day = date.getDate().toString().padStart(2, '0');
+            const nameInitial = firstName && firstName.trim() ? firstName.trim()[0].toUpperCase() : 'X';
+            const lastInitial = lastName && lastName.trim() ? lastName.trim()[0].toUpperCase() : 'X';
+            const numeroEstacion = estacion && estacion.trim() ? estacion.trim().padStart(2, '0') : '00';
+            return `${year}${month}${day}-SE${numeroEstacion}-${nameInitial}${lastInitial}`;
+        }
+
+        async function codeExists(code) {
+            try {
+                const codesRef = collection(db, 'neu_codes');
+                const q = query(codesRef, where('code', '==', code));
+                const querySnapshot = await getDocs(q);
+                return !querySnapshot.empty;
+            } catch (error) {
+                console.error('Error al verificar código:', error);
+                return false;
+            }
+        }
+
+        async function generateCode() {
+            if (!currentUser) {
+                showNotification('Esperando conexión con Firebase...', 'warning');
+                return;
+            }
+            const estacionValue = elements.estacion.value;
+            if (!estacionValue) {
+                showNotification('Por favor, selecciona una subestación', 'warning');
+                return;
+            }
+            const firstName = elements.firstName.value.trim();
+            const lastName = elements.lastName.value.trim();
+            const appName = elements.appName.value.trim();
+            
+            if (!firstName || !lastName) {
+                showNotification('Por favor, ingresa tu nombre y apellido', 'warning');
+                return;
+            }
+            
+            if (!appName) {
+                showNotification('Por favor, ingresa el nombre de la aplicación', 'warning');
+                return;
+            }
+            
+            let selectedDate = elements.datePicker.value ? new Date(elements.datePicker.value) : new Date();
+            if (elements.datePicker.value) {
+                selectedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
+            }
+            
+            let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName, estacionValue);
+            let attempts = 0;
+            const maxAttempts = 5;
+            
+            while (await codeExists(code) && attempts < maxAttempts) {
+                code = generateNEUCodeWithInitials(selectedDate, firstName, lastName, estacionValue);
+                attempts++;
+            }
+            
+            if (attempts >= maxAttempts) {
+                showNotification('Error: No se pudo generar un código único. Intenta de nuevo.', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const codesRef = collection(db, 'neu_codes');
+                const fullName = `${firstName} ${lastName}`;
+                await addDoc(codesRef, {
+                    code: code,
+                    appName: appName,
+                    generatedBy: fullName,
+                    createdAt: Timestamp.fromDate(new Date()),
+                    userId: currentUser.uid,
+                    userEmail: currentUser.email || 'Usuario Anónimo',
+                    estacion: estacionValue
+                });
+                
+                showNotification(`Código generado: ${code}`, 'success');
+                elements.firstName.value = '';
+                elements.lastName.value = '';
+                elements.appName.value = '';
+                elements.estacion.value = '';
+                elements.datePicker.value = '';
+                await loadCodes();
+                
+            } catch (error) {
+                console.error('Error al guardar código:', error);
+                showNotification('Error al guardar el código en Firebase', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function deleteCode(id, userId) {
+            if (currentFilter === 'myCodes' || userId === currentUser?.uid) {
+                if (confirm('¿Estás seguro de que quieres eliminar este código? Esto también eliminará todos sus subcódigos.')) {
+                    showLoading(true);
+                    try {
+                        const subcodesRef = collection(db, 'subcodes');
+                        const q = query(subcodesRef, where('parentCodeId', '==', id));
+                        const querySnapshot = await getDocs(q);
+                        
+                        for (const doc of querySnapshot.docs) {
+                            await deleteDoc(doc.ref);
+                        }
+                        
+                        await deleteDoc(doc(db, 'neu_codes', id));
+                        showNotification('Código y subcódigos eliminados correctamente', 'success');
+                        await loadCodes();
+                    } catch (error) {
+                        console.error('Error al eliminar:', error);
+                        showNotification('Error al eliminar el código', 'error');
+                    } finally {
+                        showLoading(false);
+                    }
+                }
+            } else {
+                showNotification('Solo puedes eliminar tus propios códigos', 'warning');
+            }
+        }
+
+        async function clearMyCodes() {
+            if (currentFilter !== 'myCodes') {
+                showNotification('Cambia al filtro "Mis Códigos" para limpiar tu historial', 'warning');
+                return;
+            }
+            
+            const myCodes = getFilteredCodes().filter(code => code.userId === currentUser?.uid);
+            
+            if (myCodes.length === 0) {
+                showNotification('No tienes códigos para eliminar', 'warning');
+                return;
+            }
+            
+            if (confirm(`¿Estás seguro? Esto eliminará TODOS TUS ${myCodes.length} códigos y sus subcódigos.`)) {
+                showLoading(true);
+                try {
+                    for (const code of myCodes) {
+                        const subcodesRef = collection(db, 'subcodes');
+                        const q = query(subcodesRef, where('parentCodeId', '==', code.id));
+                        const querySnapshot = await getDocs(q);
+                        
+                        for (const doc of querySnapshot.docs) {
+                            await deleteDoc(doc.ref);
+                        }
+                        
+                        await deleteDoc(doc(db, 'neu_codes', code.id));
+                    }
+                    showNotification(`Eliminados ${myCodes.length} códigos`, 'success');
+                    await loadCodes();
+                } catch (error) {
+                    console.error('Error al limpiar historial:', error);
+                    showNotification('Error al limpiar el historial', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+        }
+
+        async function loadCodes() {
+            showLoading(true);
+            
+            try {
+                const codesRef = collection(db, 'neu_codes');
+                const q = query(codesRef, orderBy('createdAt', 'desc'));
+                const querySnapshot = await getDocs(q);
+                
+                allCodes = [];
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    allCodes.push({
+                        id: doc.id,
+                        code: data.code,
+                        appName: data.appName || 'Sin especificar',
+                        generatedBy: data.generatedBy || data.userEmail || 'Anónimo',
+                        createdAt: data.createdAt.toDate(),
+                        userId: data.userId,
+                        userEmail: data.userEmail || 'Anónimo',
+                        estacion: data.estacion || ''
+                    });
+                });
+                
+                try {
+                    const subcodesRef = collection(db, 'subcodes');
+                    const subcodesSnapshot = await getDocs(subcodesRef);
+                    
+                    allSubcodes = [];
+                    subcodesSnapshot.forEach((doc) => {
+                        const data = doc.data();
+                        allSubcodes.push({
+                            id: doc.id,
+                            parentCodeId: data.parentCodeId,
+                            name: data.name,
+                            description: data.description || '',
+                            createdAt: data.createdAt?.toDate() || new Date(),
+                            userId: data.userId
+                        });
+                    });
+                    
+                    allSubcodes.sort((a, b) => a.createdAt - b.createdAt);
+                } catch (subcodeError) {
+                    console.warn('Error al cargar subcódigos:', subcodeError);
+                    allSubcodes = [];
+                }
+                
+                updateStats();
+                renderTable();
+                
+            } catch (error) {
+                console.error('Error al cargar códigos:', error);
+                let errorMessage = 'Error al cargar los códigos. ';
+                if (error.code === 'permission-denied') {
+                    errorMessage += 'Actualiza las reglas de Firestore.';
+                } else {
+                    errorMessage += 'Intenta refrescar.';
+                }
+                showNotification(errorMessage, 'error');
+                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">Error al cargar datos.</td></tr>';
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function updateStats() {
+            const total = allCodes.length;
+            const today = new Date().toDateString();
+            const todayCount = allCodes.filter(code => 
+                code.createdAt.toDateString() === today
+            ).length;
+            const userCodesCount = allCodes.filter(code => 
+                currentUser && code.userId === currentUser.uid
+            ).length;
+            
+            elements.totalCodes.textContent = total;
+            elements.todayCodes.textContent = todayCount;
+            elements.userCodes.textContent = userCodesCount;
+        }
+
+        function getFilteredCodes() {
+            let filtered = allCodes;
+            
+            if (currentFilter === 'myCodes' && currentUser) {
+                filtered = filtered.filter(code => code.userId === currentUser.uid);
+            }
+            
+            if (currentSearch) {
+                const searchTerm = currentSearch.toLowerCase();
+                filtered = filtered.filter(code => 
+                    code.code.toLowerCase().includes(searchTerm) ||
+                    code.appName.toLowerCase().includes(searchTerm) ||
+                    code.generatedBy.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            return filtered;
+        }
+
+        function renderTable() {
+            const filteredCodes = getFilteredCodes();
+            const totalPages = Math.ceil(filteredCodes.length / itemsPerPage);
+            
+            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+            
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const pageCodes = filteredCodes.slice(start, end);
+            
+            if (pageCodes.length === 0) {
+                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">No hay códigos</td></tr>';
+                elements.prevPage.disabled = true;
+                elements.nextPage.disabled = true;
+                document.getElementById('pageInfo').textContent = 'Página 0 de 0';
+                return;
+            }
+            
+            let html = '';
+            let rowNumber = start + 1;
+            
+            pageCodes.forEach((code) => {
+                const isOwner = currentUser && code.userId === currentUser.uid;
+                const subcodes = allSubcodes.filter(s => s.parentCodeId === code.id);
+                const isExpanded = expandedRows.has(code.id);
+                
+                html += `
+                    <tr>
+                        <td>
+                            ${subcodes.length > 0 ? 
+                                `<span class="expand-icon" onclick="window.toggleExpand('${code.id}')">${isExpanded ? '▼' : '▶'}</span>` : 
+                                ''}
+                        </td>
+                        <td>${rowNumber++}</td>
+                        <td>
+                            <strong style="color: #003366; font-family: monospace; font-size: 1.1rem;">${escapeHtml(code.code)}</strong>
+                            ${subcodes.length > 0 ? `<span class="subcode-badge">${subcodes.length}</span>` : ''}
+                        </td>
+                        <td>${escapeHtml(code.appName)}</td>
+                        <td><span class="user-badge ${isOwner ? 'owner' : ''}">${escapeHtml(code.generatedBy)}${isOwner ? ' (Tú)' : ''}</span></td>
+                        <td>${formatDateTime(code.createdAt)}</td>
+                        <td>
+                            <button class="copy-btn" onclick="window.copyToClipboard('${code.code}')">📋 Copiar</button>
+                            <button class="subcode-btn" onclick="window.openSubcodeModal('${code.id}')">➕ Subcódigo</button>
+                            ${isOwner ? `<button class="delete-btn" onclick="window.deleteCodeById('${code.id}', '${code.userId}')">🗑️ Eliminar</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+                
+                if (isExpanded && subcodes.length > 0) {
+                    subcodes.forEach((subcode) => {
+                        html += `
+                            <tr class="subcode-row">
+                                <td></td>
+                                <td class="subcode-indent"></td>
+                                <td class="subcode-indent">
+                                    <span style="color: #0066CC;">↳ ${escapeHtml(subcode.name)}</span>
+                                </td>
+                                <td class="subcode-indent" colspan="3">
+                                    <div class="subcode-description">
+                                        ${escapeHtml(subcode.description) || '<em>Sin descripción</em>'}
+                                    </div>
+                                </td>
+                                <td>
+                                    ${subcode.userId === currentUser?.uid ? 
+                                        `<button class="delete-btn" onclick="window.deleteSubcodeById('${subcode.id}')">🗑️</button>` : 
+                                        ''}
+                                </td>
+                            </tr>
+                        `;
+                    });
+                }
+            });
+            
+            elements.tableBody.innerHTML = html;
+            
+            elements.prevPage.disabled = currentPage === 1;
+            elements.nextPage.disabled = currentPage === totalPages;
+            document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        async function initAuth() {
+            try {
+                const userCredential = await signInAnonymously(auth);
+                currentUser = userCredential.user;
+                elements.statusText.textContent = 'Conectado';
+                elements.statusIndicator.classList.add('connected');
+                await loadCodes();
+            } catch (error) {
+                console.error('Error de autenticación:', error);
+                elements.statusText.textContent = 'Error de conexión';
+                elements.statusIndicator.classList.add('error');
+                showNotification('Error al conectar con Firebase', 'error');
+            }
+        }
+
+        function setupEventListeners() {
+            elements.generateBtn.addEventListener('click', generateCode);
+            elements.refreshBtn.addEventListener('click', loadCodes);
+            elements.exportExcelBtn.addEventListener('click', () => exportToExcel());
+            elements.clearHistoryBtn.addEventListener('click', clearMyCodes);
+            
+            elements.searchInput.addEventListener('input', (e) => {
+                currentSearch = e.target.value;
+                currentPage = 1;
+                elements.clearSearch.style.display = currentSearch ? 'block' : 'none';
+                renderTable();
+            });
+            
+            elements.clearSearch.addEventListener('click', () => {
+                elements.searchInput.value = '';
+                currentSearch = '';
+                elements.clearSearch.style.display = 'none';
+                currentPage = 1;
+                renderTable();
+            });
+            
+            elements.filterAllBtn.addEventListener('click', () => {
+                currentFilter = 'all';
+                elements.filterAllBtn.classList.add('active');
+                elements.filterMyCodesBtn.classList.remove('active');
+                currentPage = 1;
+                renderTable();
+            });
+            
+            elements.filterMyCodesBtn.addEventListener('click', () => {
+                currentFilter = 'myCodes';
+                elements.filterMyCodesBtn.classList.add('active');
+                elements.filterAllBtn.classList.remove('active');
+                currentPage = 1;
+                renderTable();
+            });
+            
+            elements.prevPage.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderTable();
+                }
+            });
+            
+            elements.nextPage.addEventListener('click', () => {
+                const filteredCodes = getFilteredCodes();
+                const totalPages = Math.ceil(filteredCodes.length / itemsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderTable();
+                }
+            });
+            
+            elements.saveSubcodeBtn.addEventListener('click', saveSubcode);
+            
+            document.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                    generateCode();
+                }
+            });
+            
+            window.onclick = function(event) {
+                if (event.target === elements.subcodeModal) {
+                    closeSubcodeModal();
+                }
+            }
+        }
+
+        async function saveSubcode() {
+            const name = elements.subcodeName.value.trim();
+            const description = elements.subcodeDescription.value.trim();
+            
+            if (!name) {
+                showNotification('Por favor, ingresa un nombre para el subcódigo', 'warning');
+                return;
+            }
+            
+            if (!currentParentCodeId) {
+                showNotification('Error: No se ha seleccionado un código padre', 'error');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const subcodesRef = collection(db, 'subcodes');
+                await addDoc(subcodesRef, {
+                    parentCodeId: currentParentCodeId,
+                    name: name,
+                    description: description,
+                    createdAt: Timestamp.fromDate(new Date()),
+                    userId: currentUser.uid
+                });
+                
+                showNotification('Subcódigo creado correctamente', 'success');
+                closeSubcodeModal();
+                await loadCodes();
+                
+            } catch (error) {
+                console.error('Error al guardar subcódigo:', error);
+                showNotification('Error al guardar el subcódigo', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function deleteSubcode(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este subcódigo?')) {
+                showLoading(true);
+                try {
+                    await deleteDoc(doc(db, 'subcodes', id));
+                    showNotification('Subcódigo eliminado', 'success');
+                    await loadCodes();
+                } catch (error) {
+                    console.error('Error al eliminar subcódigo:', error);
+                    showNotification('Error al eliminar', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+        }
+
+        window.exportToExcel = function() {
+            const filteredCodes = getFilteredCodes();
+            
+            if (filteredCodes.length === 0) {
+                showNotification('No hay datos para exportar', 'warning');
+                return;
+            }
+            
+            const exportData = [];
+            let index = 1;
+            
+            filteredCodes.forEach((code) => {
+                exportData.push({
+                    '#': index++,
+                    'Código NEU': code.code,
+                    'Aplicación': code.appName,
+                    'Generado por': code.generatedBy,
+                    'Fecha de Generación': formatDateTime(code.createdAt),
+                    'Tipo': 'Principal'
+                });
+                
+                const subcodes = allSubcodes.filter(s => s.parentCodeId === code.id);
+                subcodes.forEach((subcode) => {
+                    exportData.push({
+                        '#': '',
+                        'Código NEU': `↳ ${subcode.name}`,
+                        'Aplicación': subcode.description || 'Sin descripción',
+                        'Generado por': '',
+                        'Fecha de Generación': formatDateTime(subcode.createdAt),
+                        'Tipo': 'Subcódigo'
+                    });
+                });
+            });
+            
+            const ws = XLSX.utils.json_to_sheet(exportData);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Códigos NEU');
+            
+            const fileName = `NEU_codes_${new Date().toISOString().slice(0,19)}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            showNotification(`Exportados ${filteredCodes.length} códigos`, 'success');
+        };
+
+        window.copyToClipboard = function(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification(`Código "${code}" copiado`, 'success');
+            }).catch(() => {
+                showNotification('Error al copiar', 'error');
+            });
+        };
+
+        window.deleteCodeById = function(id, userId) {
+            deleteCode(id, userId);
+        };
+
+        window.openSubcodeModal = function(parentCodeId) {
+            currentParentCodeId = parentCodeId;
+            elements.subcodeName.value = '';
+            elements.subcodeDescription.value = '';
+            elements.modalTitle.textContent = 'Agregar Subcódigo';
+            elements.subcodeModal.style.display = 'block';
+        };
+
+        window.closeSubcodeModal = function() {
+            elements.subcodeModal.style.display = 'none';
+            currentParentCodeId = null;
+        };
+
+        window.toggleExpand = function(codeId) {
+            if (expandedRows.has(codeId)) {
+                expandedRows.delete(codeId);
+            } else {
+                expandedRows.add(codeId);
+            }
+            renderTable();
+        };
+
+        window.deleteSubcodeById = function(id) {
+            deleteSubcode(id);
+        };
+
+        setupEventListeners();
+        initAuth();
+    </script>
+</body>
+</html>
