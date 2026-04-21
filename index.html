@@ -7,7 +7,6 @@
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script> 
     
     <style>
-        /* [Todos los estilos se mantienen igual] */
         * {
             margin: 0;
             padding: 0;
@@ -33,52 +32,84 @@
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         
         .header {
             background: linear-gradient(135deg, #003366 0%, #0066CC 100%);
             color: white;
-            padding: 30px;
+            padding: 25px 30px;
             text-align: center;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            filter: brightness(0) invert(1);
-        }
-
         .header h1 {
-            font-size: 2rem;
+            font-size: 1.9rem;
             margin: 0;
             font-weight: 600;
         }
 
-        .user-status {
-            display: inline-flex;
+        .user-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.15);
+            padding: 8px 16px;
+            border-radius: 30px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid #FFB81C;
+        }
+
+        .user-name {
+            font-weight: 500;
+        }
+
+        .login-btn, .logout-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .login-btn {
+            background: white;
+            color: #003366;
+        }
+
+        .login-btn:hover {
+            background: #FFB81C;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .logout-btn {
             background: rgba(255,255,255,0.2);
-            padding: 5px 12px;
-            border-radius: 20px;
-            margin-top: 10px;
-            font-size: 0.8rem;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .logout-btn:hover {
+            background: #dc3545;
+            border-color: #dc3545;
         }
 
         .status-indicator {
@@ -94,16 +125,12 @@
             animation: none;
         }
 
-        .status-indicator.error {
-            background: #dc3545;
-            animation: none;
-        }
-
         @keyframes pulse {
             0% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.5; transform: scale(0.8); }
             100% { opacity: 1; transform: scale(1); }
         }
+
         .control-panel {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -194,6 +221,7 @@
             color: #6c757d;
             margin-top: 5px;
         }
+
         .btn-primary, .btn-secondary, .btn-danger {
             display: inline-flex;
             align-items: center;
@@ -215,6 +243,12 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 51, 102, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
         }
 
         .btn-secondary {
@@ -241,6 +275,7 @@
             width: 18px;
             height: 18px;
         }
+
         .filter-section {
             padding: 15px 30px;
             background: white;
@@ -272,6 +307,7 @@
             color: white;
             border-color: transparent;
         }
+
         .search-actions {
             padding: 20px 30px;
             background: white;
@@ -333,6 +369,7 @@
             gap: 10px;
             flex-wrap: wrap;
         }
+
         .table-container {
             position: relative;
             overflow-x: auto;
@@ -372,13 +409,22 @@
             padding: 40px;
             color: #6c757d;
         }
+
         .user-badge {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
             padding: 4px 8px;
             background: #f8f9fa;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
             color: #495057;
+        }
+
+        .user-badge img {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
         }
 
         .user-badge.owner {
@@ -386,6 +432,7 @@
             color: #003366;
             font-weight: 500;
         }
+
         .copy-btn, .delete-btn, .subcode-btn {
             padding: 5px 10px;
             margin: 0 3px;
@@ -479,6 +526,7 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
         .pagination {
             display: flex;
             justify-content: center;
@@ -513,6 +561,7 @@
             color: #495057;
             font-weight: 500;
         }
+
         .notification {
             position: fixed;
             bottom: 20px;
@@ -556,14 +605,8 @@
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header {
@@ -604,6 +647,50 @@
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
+        }
+
+        .login-prompt {
+            text-align: center;
+            padding: 60px 40px;
+        }
+
+        .login-prompt h3 {
+            color: #003366;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .login-prompt p {
+            margin-bottom: 25px;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .google-login-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: white;
+            color: #333;
+            padding: 14px 35px;
+            border-radius: 50px;
+            border: 2px solid #dee2e6;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+
+        .google-login-btn:hover {
+            border-color: #0066CC;
+            box-shadow: 0 5px 25px rgba(0,102,204,0.25);
+            transform: translateY(-2px);
+        }
+
+        .google-login-btn img {
+            width: 24px;
+            height: 24px;
         }
 
         @media (max-width: 768px) {
@@ -662,206 +749,37 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">
-                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-                    <path d="M12 7v10"/>
-                    <path d="M7 12h10"/>
-                </svg>
-                <h1>Generador Proyectos NEU DOMLS QUITO</h1>
-            </div>
-            <div id="userStatus" class="user-status">
-                <div class="status-indicator"></div>
-                <span id="statusText">Conectando...</span>
-            </div>
-        </div>
-        <div class="control-panel">
-            <div class="generator-section">
-                <h2>Generar Nuevo Código</h2>
-                <div class="name-row">
-                    <div class="form-group">
-                        <label for="firstName">Nombre</label>
-                        <input type="text" id="firstName" placeholder="Tu nombre" maxlength="50">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastName">Apellido</label> 
-                        <input type="text" id="lastName" placeholder="Tu apellido" maxlength="50">
-                    </div>
+            <h1>⚡ Generador Proyectos NEU DOMLS QUITO</h1>
+            <div class="user-section">
+                <div id="userInfo" class="user-info" style="display: none;">
+                    <img id="userAvatar" class="user-avatar" src="" alt="">
+                    <span id="userName" class="user-name"></span>
+                    <div class="status-indicator connected"></div>
                 </div>
-                <div class="form-group">
-                    <label for="appName">Proyecto</label>
-                    <input type="text" id="appName" placeholder="Nombre del proyecto" maxlength="100">
-                    <small>Ej: Fondo rotativo, Caja chica, Bajas, etc.</small>
-                </div>
-                <div class="form-group">
-                    <label for="estacion">Subestación</label>
-                    <select id="estacion">
-                        <option value="">-- Selecciona una subestación --</option>
-                        <option value="01">S/E (01) Olímpico</option>
-                        <option value="02">S/E (02) Luluncoto</option>
-                        <option value="03">S/E (03) Barrio Nuevo</option>
-                        <option value="04">S/E (04) Chimbacalle</option>
-                        <option value="05">S/E (05) Chilibulo</option>
-                        <option value="06">S/E (06) Escuela Sucre</option>
-                        <option value="07">S/E (07) San Roque</option>
-                        <option value="08">S/E (08) La Marín</option>
-                        <option value="09">S/E (09) Miraflores</option>
-                        <option value="10">S/E (10) Diez Vieja</option>
-                        <option value="11">S/E (11) Belisario Quevedo</option>
-                        <option value="12">S/E (12) La Floresta</option>
-                        <option value="13">S/E (13) Granda Centeno</option>
-                        <option value="14">S/E (14) Gualo</option>
-                        <option value="15">S/E (15) El Bosque</option>
-                        <option value="16">S/E (16) Rio Coca</option>
-                        <option value="17">S/E (17) Andalucía</option>
-                        <option value="18">S/E (18) Cristiania</option>
-                        <option value="19">S/E (19) Cotocollao</option>
-                        <option value="20">S/E (20) Sur</option>
-                        <option value="21">S/E (21) Eplicachima</option>
-                        <option value="22">S/E (22) San Antonio</option>
-                        <option value="23">S/E (23) Conocoto</option>
-                        <option value="24">S/E (24) Carolina</option>
-                        <option value="25">S/E (25) San Pablo</option>
-                        <option value="26">S/E (26) Alangasi</option>
-                        <option value="27">S/E (27) San Rafael</option>
-                        <option value="28">S/E (28) Iñaquito</option>
-                        <option value="29">S/E (29) Nueva Cumbayá</option>
-                        <option value="30">S/E (30) Plataforma Financiera</option>
-                        <option value="31">S/E (31) Tababela</option>
-                        <option value="32">S/E (32) Diez Nueva</option>
-                        <option value="33">S/E (33) Nuevo Aeropuerto</option>
-                        <option value="36">S/E (36) Tumbaco</option>
-                        <option value="37">S/E (37) Santa Rosa</option>
-                        <option value="38">S/E (38) Norte</option>
-                        <option value="39">S/E (39) Vicentina</option>
-                        <option value="41">S/E (41) Selva Alegre</option>
-                        <option value="42">S/E (42) Móvil Papallacta</option>
-                        <option value="46">S/E (46) El Inga Bajo</option>
-                        <option value="48">S/E (48) Mirador Alto</option>
-                        <option value="49">S/E (49) Los Bancos</option>
-                        <option value="51">S/E (51) Bicentenario</option>
-                        <option value="53">S/E (53) Pérez Guerrero</option>
-                        <option value="55">S/E (55) Sangolquí</option>
-                        <option value="57">S/E (57) Pomasqui</option>
-                        <option value="58">S/E (58) El Quinche</option>
-                        <option value="59">S/E (59) Eugenio Espejo</option>
-                        <option value="63">S/E (63) Batán Alto</option>
-                        <option value="68">S/E (68) Labrador</option>
-                        <option value="70">S/E (70) Shelter T-GOOD</option>
-                        <option value="73">S/E (73) El Obraje</option>
-                        <option value="80">S/E (80) Cumbayá</option>
-                        <option value="81">S/E (81) Estación Terrena</option>
-                        <option value="82">S/E (82) Gualberto Hernández</option>
-                        <option value="84">S/E (84) Guangopolo Hidráulica</option>
-                        <option value="86">S/E (86) Nayón</option>
-                        <option value="88">S/E (88) Pasochoa</option>
-                    </select>
-                    <small>Selecciona la subestación correspondiente</small>
-                </div>
-                <div class="form-group">
-                    <label for="datePicker">
-                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                            <line x1="3" y1="10" x2="21" y2="10"></line>
-                        </svg>
-                        Fecha (opcional)
-                    </label>
-                    <input type="date" id="datePicker">
-                    <small>Si no seleccionas fecha, se usará la fecha actual</small>
-                </div>
-                <button id="generateBtn" class="btn-primary">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M21 12a9 9 0 11-9-9M12 6v6l4 2"/>
-                        <path d="M15 3h6v6"/>
+                <button id="loginBtn" class="login-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
                     </svg>
-                    Generar Código NEU
+                    Iniciar Sesión con Google
                 </button>
-            </div>
-            <div class="stats-section">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalCodes">0</div>
-                    <div class="stat-label">Códigos Generados</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="todayCodes">0</div>
-                    <div class="stat-label">Generados Hoy</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="userCodes">0</div>
-                    <div class="stat-label">Mis Códigos</div>
-                </div>
-            </div>
-        </div>
-        <div class="filter-section">
-            <div class="filter-buttons">
-                <button id="filterAllBtn" class="filter-btn active">Todos</button>
-                <button id="filterMyCodesBtn" class="filter-btn">Mis Códigos</button>
-            </div>
-        </div>
-        <div class="search-actions">
-            <div class="search-box">
-                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                </svg>
-                <input type="text" id="searchInput" placeholder="Buscar por código, aplicación o generado por...">
-                <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
-            </div>
-            <div class="action-buttons">
-                <button id="refreshBtn" class="btn-secondary">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                <button id="logoutBtn" class="logout-btn" style="display: none;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
                     </svg>
-                    Actualizar
-                </button>
-                <button id="exportExcelBtn" class="btn-secondary">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="12" y1="18" x2="12" y2="12"/>
-                        <line x1="9" y1="15" x2="15" y2="15"/>
-                    </svg>
-                    Exportar a Excel
-                </button>
-                <button id="clearHistoryBtn" class="btn-danger">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
-                    </svg>
-                    Limpiar Mis Códigos
+                    Cerrar Sesión
                 </button>
             </div>
         </div>
-        <div class="table-container">
-            <div id="loadingSpinner" class="loading-spinner" style="display: none;">
-                <div class="spinner"></div>
-                <p>Cargando códigos...</p>
-            </div>
-            <table id="codesTable">
-                <thead>
-                    <tr>
-                        <th style="width: 30px;"></th>
-                        <th>#</th>
-                        <th>Código NEU</th>
-                        <th>Aplicación</th>
-                        <th>Generado por</th>
-                        <th>Fecha de Generación</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    <tr class="empty-row">
-                        <td colspan="7">Conectando con Firebase...</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="pagination" id="pagination">
-            <button id="prevPage" disabled>Anterior</button>
-            <span id="pageInfo">Página 1</span>
-            <button id="nextPage" disabled>Siguiente</button>
+        <div id="mainContent"></div>
+        <div id="loginPrompt" class="login-prompt">
+            <h3>🔐 Inicia sesión para continuar</h3>
+            <p>Usa tu cuenta de Google para acceder a tus códigos desde cualquier dispositivo</p>
+            <button id="googleLoginBtn" class="google-login-btn">
+                <img src="https://www.google.com/favicon.ico" alt="Google">
+                Continuar con Google
+            </button>
         </div>
         <div id="notification" class="notification"></div>
     </div>
@@ -904,7 +822,7 @@
     <script type="module">
         import { initializeApp } from "firebase/app";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, deleteDoc, doc, where, Timestamp } from "firebase/firestore";
-        import { getAuth, signInAnonymously } from "firebase/auth";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "firebase/auth";
         
         const firebaseConfig = {
             apiKey: "AIzaSyDBdql3VerCJwgsz1H3ikxt23MffcCUZj0",
@@ -919,6 +837,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+        
+        provider.setCustomParameters({ prompt: 'select_account' });
+        
         let currentUser = null;
         let allCodes = [];
         let allSubcodes = [];
@@ -928,62 +850,330 @@
         let currentFilter = 'all';
         let currentParentCodeId = null;
         let expandedRows = new Set();
+        let mainContentHTML = '';
         
-        const elements = {
-            generateBtn: document.getElementById('generateBtn'),
-            refreshBtn: document.getElementById('refreshBtn'),
-            searchInput: document.getElementById('searchInput'),
-            clearSearch: document.getElementById('clearSearch'),
-            filterAllBtn: document.getElementById('filterAllBtn'),
-            filterMyCodesBtn: document.getElementById('filterMyCodesBtn'),
-            exportExcelBtn: document.getElementById('exportExcelBtn'),
-            clearHistoryBtn: document.getElementById('clearHistoryBtn'),
-            prevPage: document.getElementById('prevPage'),
-            nextPage: document.getElementById('nextPage'),
-            datePicker: document.getElementById('datePicker'),
-            firstName: document.getElementById('firstName'),
-            lastName: document.getElementById('lastName'),
-            appName: document.getElementById('appName'),
-            estacion: document.getElementById('estacion'),
-            tableBody: document.getElementById('tableBody'),
-            totalCodes: document.getElementById('totalCodes'),
-            todayCodes: document.getElementById('todayCodes'),
-            userCodes: document.getElementById('userCodes'),
-            statusText: document.getElementById('statusText'),
-            statusIndicator: document.querySelector('.status-indicator'),
-            loadingSpinner: document.getElementById('loadingSpinner'),
-            notification: document.getElementById('notification'),
-            subcodeModal: document.getElementById('subcodeModal'),
-            subcodeName: document.getElementById('subcodeName'),
-            subcodeDescription: document.getElementById('subcodeDescription'),
-            saveSubcodeBtn: document.getElementById('saveSubcodeBtn'),
-            modalTitle: document.getElementById('modalTitle')
-        };
+        const isVercel = window.location.hostname.includes('vercel.app');
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        console.log('🌐 Entorno:', isVercel ? 'Vercel' : isLocalhost ? 'Localhost' : 'Otro');
+        console.log('📝 Dominio actual:', window.location.hostname);
+        
+        const loginPrompt = document.getElementById('loginPrompt');
+        const mainContent = document.getElementById('mainContent');
+        const loginBtn = document.getElementById('loginBtn');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const googleLoginBtn = document.getElementById('googleLoginBtn');
+        const userInfo = document.getElementById('userInfo');
+        const userAvatar = document.getElementById('userAvatar');
+        const userName = document.getElementById('userName');
+        const notification = document.getElementById('notification');
+
+        function saveMainContent() {
+            mainContentHTML = `
+                <div class="control-panel">
+                    <div class="generator-section">
+                        <h2>Generar Nuevo Código</h2>
+                        <div class="name-row">
+                            <div class="form-group">
+                                <label for="firstName">Nombre</label>
+                                <input type="text" id="firstName" placeholder="Tu nombre" maxlength="50">
+                            </div>
+                            <div class="form-group">
+                                <label for="lastName">Apellido</label> 
+                                <input type="text" id="lastName" placeholder="Tu apellido" maxlength="50">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="appName">Proyecto</label>
+                            <input type="text" id="appName" placeholder="Nombre del proyecto" maxlength="100">
+                            <small>Ej: Fondo rotativo, Caja chica, Bajas, etc.</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="estacion">Subestación</label>
+                            <select id="estacion">
+                                <option value="">-- Selecciona una subestación --</option>
+                                <option value="01">S/E (01) Olímpico</option>
+                                <option value="02">S/E (02) Luluncoto</option>
+                                <option value="03">S/E (03) Barrio Nuevo</option>
+                                <option value="04">S/E (04) Chimbacalle</option>
+                                <option value="05">S/E (05) Chilibulo</option>
+                                <option value="06">S/E (06) Escuela Sucre</option>
+                                <option value="07">S/E (07) San Roque</option>
+                                <option value="08">S/E (08) La Marín</option>
+                                <option value="09">S/E (09) Miraflores</option>
+                                <option value="10">S/E (10) Diez Vieja</option>
+                                <option value="11">S/E (11) Belisario Quevedo</option>
+                                <option value="12">S/E (12) La Floresta</option>
+                                <option value="13">S/E (13) Granda Centeno</option>
+                                <option value="14">S/E (14) Gualo</option>
+                                <option value="15">S/E (15) El Bosque</option>
+                                <option value="16">S/E (16) Rio Coca</option>
+                                <option value="17">S/E (17) Andalucía</option>
+                                <option value="18">S/E (18) Cristiania</option>
+                                <option value="19">S/E (19) Cotocollao</option>
+                                <option value="20">S/E (20) Sur</option>
+                                <option value="21">S/E (21) Eplicachima</option>
+                                <option value="22">S/E (22) San Antonio</option>
+                                <option value="23">S/E (23) Conocoto</option>
+                                <option value="24">S/E (24) Carolina</option>
+                                <option value="25">S/E (25) San Pablo</option>
+                                <option value="26">S/E (26) Alangasi</option>
+                                <option value="27">S/E (27) San Rafael</option>
+                                <option value="28">S/E (28) Iñaquito</option>
+                                <option value="29">S/E (29) Nueva Cumbayá</option>
+                                <option value="30">S/E (30) Plataforma Financiera</option>
+                                <option value="31">S/E (31) Tababela</option>
+                                <option value="32">S/E (32) Diez Nueva</option>
+                                <option value="33">S/E (33) Nuevo Aeropuerto</option>
+                                <option value="36">S/E (36) Tumbaco</option>
+                                <option value="37">S/E (37) Santa Rosa</option>
+                                <option value="38">S/E (38) Norte</option>
+                                <option value="39">S/E (39) Vicentina</option>
+                                <option value="41">S/E (41) Selva Alegre</option>
+                                <option value="42">S/E (42) Móvil Papallacta</option>
+                                <option value="46">S/E (46) El Inga Bajo</option>
+                                <option value="48">S/E (48) Mirador Alto</option>
+                                <option value="49">S/E (49) Los Bancos</option>
+                                <option value="51">S/E (51) Bicentenario</option>
+                                <option value="53">S/E (53) Pérez Guerrero</option>
+                                <option value="55">S/E (55) Sangolquí</option>
+                                <option value="57">S/E (57) Pomasqui</option>
+                                <option value="58">S/E (58) El Quinche</option>
+                                <option value="59">S/E (59) Eugenio Espejo</option>
+                                <option value="63">S/E (63) Batán Alto</option>
+                                <option value="68">S/E (68) Labrador</option>
+                                <option value="70">S/E (70) Shelter T-GOOD</option>
+                                <option value="73">S/E (73) El Obraje</option>
+                                <option value="80">S/E (80) Cumbayá</option>
+                                <option value="81">S/E (81) Estación Terrena</option>
+                                <option value="82">S/E (82) Gualberto Hernández</option>
+                                <option value="84">S/E (84) Guangopolo Hidráulica</option>
+                                <option value="86">S/E (86) Nayón</option>
+                                <option value="88">S/E (88) Pasochoa</option>
+                            </select>
+                            <small>Selecciona la subestación correspondiente</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="datePicker">
+                                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Fecha (opcional)
+                            </label>
+                            <input type="date" id="datePicker">
+                            <small>Si no seleccionas fecha, se usará la fecha actual</small>
+                        </div>
+                        <button id="generateBtn" class="btn-primary">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M21 12a9 9 0 11-9-9M12 6v6l4 2"/>
+                                <path d="M15 3h6v6"/>
+                            </svg>
+                            Generar Código NEU
+                        </button>
+                    </div>
+                    <div class="stats-section">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalCodes">0</div>
+                            <div class="stat-label">Códigos Generados</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="todayCodes">0</div>
+                            <div class="stat-label">Generados Hoy</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="userCodes">0</div>
+                            <div class="stat-label">Mis Códigos</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <div class="filter-buttons">
+                        <button id="filterAllBtn" class="filter-btn active">Todos</button>
+                        <button id="filterMyCodesBtn" class="filter-btn">Mis Códigos</button>
+                    </div>
+                </div>
+                <div class="search-actions">
+                    <div class="search-box">
+                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                        <input type="text" id="searchInput" placeholder="Buscar por código, aplicación o generado por...">
+                        <button id="clearSearch" class="clear-search" style="display: none;">✕</button>
+                    </div>
+                    <div class="action-buttons">
+                        <button id="refreshBtn" class="btn-secondary">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                            </svg>
+                            Actualizar
+                        </button>
+                        <button id="exportExcelBtn" class="btn-secondary">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                                <polyline points="14 2 14 8 20 8"/>
+                                <line x1="12" y1="18" x2="12" y2="12"/>
+                                <line x1="9" y1="15" x2="15" y2="15"/>
+                            </svg>
+                            Exportar a Excel
+                        </button>
+                        <button id="clearHistoryBtn" class="btn-danger">
+                            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/>
+                            </svg>
+                            Limpiar Mis Códigos
+                        </button>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div id="loadingSpinner" class="loading-spinner" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Cargando códigos...</p>
+                    </div>
+                    <table id="codesTable">
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;"></th>
+                                <th>#</th>
+                                <th>Código NEU</th>
+                                <th>Aplicación</th>
+                                <th>Generado por</th>
+                                <th>Fecha de Generación</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <tr class="empty-row">
+                                <td colspan="7">Cargando...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pagination" id="pagination">
+                    <button id="prevPage" disabled>Anterior</button>
+                    <span id="pageInfo">Página 1</span>
+                    <button id="nextPage" disabled>Siguiente</button>
+                </div>
+            `;
+        }
 
         function showNotification(message, type = 'success') {
-            elements.notification.textContent = message;
-            elements.notification.style.backgroundColor = type === 'success' ? '#28a745' : type === 'warning' ? '#FFB81C' : '#dc3545';
-            elements.notification.style.color = type === 'warning' ? '#000' : '#fff';
-            elements.notification.classList.add('show');
-            setTimeout(() => {
-                elements.notification.classList.remove('show');
-            }, 3000);
+            notification.textContent = message;
+            notification.style.backgroundColor = type === 'success' ? '#28a745' : type === 'warning' ? '#FFB81C' : '#dc3545';
+            notification.style.color = type === 'warning' ? '#000' : '#fff';
+            notification.classList.add('show');
+            setTimeout(() => notification.classList.remove('show'), 3000);
+        }
+
+        async function loginWithGoogle() {
+            try {
+                const result = await signInWithPopup(auth, provider);
+                currentUser = result.user;
+                updateUIForLoggedInUser();
+                showNotification(`¡Bienvenido ${currentUser.displayName || currentUser.email}!`, 'success');
+            } catch (error) {
+                console.error('Error de login:', error);
+                
+                if (error.code === 'auth/unauthorized-domain') {
+                    const domain = window.location.hostname;
+                    showNotification(`Dominio no autorizado. Agrega "${domain}" en Firebase Console`, 'error');
+                    console.log(`\n🔧 Agrega este dominio en Firebase:\n   ${domain}\n   localhost\n   127.0.0.1\n`);
+                } else if (error.code === 'auth/popup-closed-by-user') {
+                    showNotification('Inicio de sesión cancelado', 'warning');
+                } else {
+                    showNotification(`Error: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        async function logout() {
+            try {
+                await signOut(auth);
+                currentUser = null;
+                updateUIForLoggedOutUser();
+                showNotification('Sesión cerrada', 'success');
+            } catch (error) {
+                console.error('Error al cerrar sesión:', error);
+                showNotification('Error al cerrar sesión', 'error');
+            }
+        }
+
+        function updateUIForLoggedInUser() {
+            if (currentUser) {
+                loginPrompt.style.display = 'none';
+                mainContent.innerHTML = mainContentHTML;
+                mainContent.style.display = 'block';
+                
+                loginBtn.style.display = 'none';
+                logoutBtn.style.display = 'flex';
+                userInfo.style.display = 'flex';
+                userAvatar.src = currentUser.photoURL || 'https://via.placeholder.com/32';
+                userName.textContent = currentUser.displayName || currentUser.email;
+                
+                initializeAppElements();
+                loadCodes();
+            }
+        }
+
+        function updateUIForLoggedOutUser() {
+            loginPrompt.style.display = 'block';
+            mainContent.style.display = 'none';
+            loginBtn.style.display = 'flex';
+            logoutBtn.style.display = 'none';
+            userInfo.style.display = 'none';
+            allCodes = [];
+            allSubcodes = [];
+        }
+
+        let elements = {};
+
+        function initializeAppElements() {
+            elements = {
+                generateBtn: document.getElementById('generateBtn'),
+                refreshBtn: document.getElementById('refreshBtn'),
+                searchInput: document.getElementById('searchInput'),
+                clearSearch: document.getElementById('clearSearch'),
+                filterAllBtn: document.getElementById('filterAllBtn'),
+                filterMyCodesBtn: document.getElementById('filterMyCodesBtn'),
+                exportExcelBtn: document.getElementById('exportExcelBtn'),
+                clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+                prevPage: document.getElementById('prevPage'),
+                nextPage: document.getElementById('nextPage'),
+                datePicker: document.getElementById('datePicker'),
+                firstName: document.getElementById('firstName'),
+                lastName: document.getElementById('lastName'),
+                appName: document.getElementById('appName'),
+                estacion: document.getElementById('estacion'),
+                tableBody: document.getElementById('tableBody'),
+                totalCodes: document.getElementById('totalCodes'),
+                todayCodes: document.getElementById('todayCodes'),
+                userCodes: document.getElementById('userCodes'),
+                loadingSpinner: document.getElementById('loadingSpinner'),
+                subcodeModal: document.getElementById('subcodeModal'),
+                subcodeName: document.getElementById('subcodeName'),
+                subcodeDescription: document.getElementById('subcodeDescription'),
+                saveSubcodeBtn: document.getElementById('saveSubcodeBtn'),
+                modalTitle: document.getElementById('modalTitle')
+            };
+            
+            setupEventListeners();
         }
 
         function showLoading(show) {
-            elements.loadingSpinner.style.display = show ? 'flex' : 'none';
-            const table = document.getElementById('codesTable');
-            if (table) table.style.opacity = show ? '0.5' : '1';
+            if (elements.loadingSpinner) {
+                elements.loadingSpinner.style.display = show ? 'flex' : 'none';
+            }
         }
 
         function formatDateTime(date) {
             if (!date) return 'Fecha inválida';
             return date.toLocaleString('es-ES', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit'
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit'
             });
         }
 
@@ -991,193 +1181,118 @@
             const year = date.getFullYear().toString().slice(-2);
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const day = date.getDate().toString().padStart(2, '0');
-            const nameInitial = firstName && firstName.trim() ? firstName.trim()[0].toUpperCase() : 'X';
-            const lastInitial = lastName && lastName.trim() ? lastName.trim()[0].toUpperCase() : 'X';
-            const numeroEstacion = estacion && estacion.trim() ? estacion.trim().padStart(2, '0') : '00';
-            return `${year}${month}${day}-SE${numeroEstacion}-${nameInitial}${lastInitial}`;
+            const nameInitial = firstName?.trim()[0]?.toUpperCase() || 'X';
+            const lastInitial = lastName?.trim()[0]?.toUpperCase() || 'X';
+            const numeroEstacion = estacion?.trim() || '00';
+            return `${year}${month}${day}-SE${numeroEstacion.padStart(2, '0')}-${nameInitial}${lastInitial}`;
         }
 
         async function codeExists(code) {
             try {
                 const codesRef = collection(db, 'neu_codes');
                 const q = query(codesRef, where('code', '==', code));
-                const querySnapshot = await getDocs(q);
-                return !querySnapshot.empty;
+                const snapshot = await getDocs(q);
+                return !snapshot.empty;
             } catch (error) {
-                console.error('Error al verificar código:', error);
                 return false;
             }
         }
 
         async function generateCode() {
             if (!currentUser) {
-                showNotification('Esperando conexión con Firebase...', 'warning');
+                showNotification('Debes iniciar sesión', 'warning');
                 return;
             }
-            const estacionValue = elements.estacion.value;
+            
+            const estacionValue = elements.estacion?.value;
             if (!estacionValue) {
-                showNotification('Por favor, selecciona una subestación', 'warning');
+                showNotification('Selecciona una subestación', 'warning');
                 return;
             }
-            const firstName = elements.firstName.value.trim();
-            const lastName = elements.lastName.value.trim();
-            const appName = elements.appName.value.trim();
+            
+            const firstName = elements.firstName?.value.trim();
+            const lastName = elements.lastName?.value.trim();
+            const appName = elements.appName?.value.trim();
             
             if (!firstName || !lastName) {
-                showNotification('Por favor, ingresa tu nombre y apellido', 'warning');
+                showNotification('Ingresa tu nombre y apellido', 'warning');
                 return;
             }
             
             if (!appName) {
-                showNotification('Por favor, ingresa el nombre de la aplicación', 'warning');
+                showNotification('Ingresa el nombre del proyecto', 'warning');
                 return;
             }
             
-            let selectedDate = elements.datePicker.value ? new Date(elements.datePicker.value) : new Date();
-            if (elements.datePicker.value) {
-                selectedDate = new Date(selectedDate.getTime() + selectedDate.getTimezoneOffset() * 60000);
-            }
+            let selectedDate = elements.datePicker?.value ? new Date(elements.datePicker.value) : new Date();
             
             let code = generateNEUCodeWithInitials(selectedDate, firstName, lastName, estacionValue);
             let attempts = 0;
-            const maxAttempts = 5;
             
-            while (await codeExists(code) && attempts < maxAttempts) {
+            while (await codeExists(code) && attempts < 5) {
                 code = generateNEUCodeWithInitials(selectedDate, firstName, lastName, estacionValue);
                 attempts++;
-            }
-            
-            if (attempts >= maxAttempts) {
-                showNotification('Error: No se pudo generar un código único. Intenta de nuevo.', 'error');
-                return;
             }
             
             showLoading(true);
             
             try {
-                const codesRef = collection(db, 'neu_codes');
-                const fullName = `${firstName} ${lastName}`;
-                await addDoc(codesRef, {
+                await addDoc(collection(db, 'neu_codes'), {
                     code: code,
                     appName: appName,
-                    generatedBy: fullName,
+                    generatedBy: currentUser.displayName || currentUser.email,
+                    generatedByEmail: currentUser.email,
+                    userPhotoURL: currentUser.photoURL,
                     createdAt: Timestamp.fromDate(new Date()),
                     userId: currentUser.uid,
-                    userEmail: currentUser.email || 'Usuario Anónimo',
                     estacion: estacionValue
                 });
                 
-                showNotification(`Código generado: ${code}`, 'success');
+                showNotification(`✅ Código generado: ${code}`, 'success');
                 elements.firstName.value = '';
                 elements.lastName.value = '';
                 elements.appName.value = '';
                 elements.estacion.value = '';
                 elements.datePicker.value = '';
-                await loadCodes();
                 
+                await loadCodes();
             } catch (error) {
-                console.error('Error al guardar código:', error);
-                showNotification('Error al guardar el código en Firebase', 'error');
+                console.error('Error:', error);
+                showNotification('Error al guardar el código', 'error');
             } finally {
                 showLoading(false);
             }
         }
 
-        async function deleteCode(id, userId) {
-            if (currentFilter === 'myCodes' || userId === currentUser?.uid) {
-                if (confirm('¿Estás seguro de que quieres eliminar este código? Esto también eliminará todos sus subcódigos.')) {
-                    showLoading(true);
-                    try {
-                        const subcodesRef = collection(db, 'subcodes');
-                        const q = query(subcodesRef, where('parentCodeId', '==', id));
-                        const querySnapshot = await getDocs(q);
-                        
-                        for (const doc of querySnapshot.docs) {
-                            await deleteDoc(doc.ref);
-                        }
-                        
-                        await deleteDoc(doc(db, 'neu_codes', id));
-                        showNotification('Código y subcódigos eliminados correctamente', 'success');
-                        await loadCodes();
-                    } catch (error) {
-                        console.error('Error al eliminar:', error);
-                        showNotification('Error al eliminar el código', 'error');
-                    } finally {
-                        showLoading(false);
-                    }
-                }
-            } else {
-                showNotification('Solo puedes eliminar tus propios códigos', 'warning');
-            }
-        }
-
-        async function clearMyCodes() {
-            if (currentFilter !== 'myCodes') {
-                showNotification('Cambia al filtro "Mis Códigos" para limpiar tu historial', 'warning');
-                return;
-            }
-            
-            const myCodes = getFilteredCodes().filter(code => code.userId === currentUser?.uid);
-            
-            if (myCodes.length === 0) {
-                showNotification('No tienes códigos para eliminar', 'warning');
-                return;
-            }
-            
-            if (confirm(`¿Estás seguro? Esto eliminará TODOS TUS ${myCodes.length} códigos y sus subcódigos.`)) {
-                showLoading(true);
-                try {
-                    for (const code of myCodes) {
-                        const subcodesRef = collection(db, 'subcodes');
-                        const q = query(subcodesRef, where('parentCodeId', '==', code.id));
-                        const querySnapshot = await getDocs(q);
-                        
-                        for (const doc of querySnapshot.docs) {
-                            await deleteDoc(doc.ref);
-                        }
-                        
-                        await deleteDoc(doc(db, 'neu_codes', code.id));
-                    }
-                    showNotification(`Eliminados ${myCodes.length} códigos`, 'success');
-                    await loadCodes();
-                } catch (error) {
-                    console.error('Error al limpiar historial:', error);
-                    showNotification('Error al limpiar el historial', 'error');
-                } finally {
-                    showLoading(false);
-                }
-            }
-        }
-
         async function loadCodes() {
+            if (!currentUser) return;
+            
             showLoading(true);
             
             try {
                 const codesRef = collection(db, 'neu_codes');
                 const q = query(codesRef, orderBy('createdAt', 'desc'));
-                const querySnapshot = await getDocs(q);
+                const snapshot = await getDocs(q);
                 
                 allCodes = [];
-                querySnapshot.forEach((doc) => {
+                snapshot.forEach((doc) => {
                     const data = doc.data();
                     allCodes.push({
                         id: doc.id,
                         code: data.code,
                         appName: data.appName || 'Sin especificar',
-                        generatedBy: data.generatedBy || data.userEmail || 'Anónimo',
-                        createdAt: data.createdAt.toDate(),
-                        userId: data.userId,
-                        userEmail: data.userEmail || 'Anónimo',
-                        estacion: data.estacion || ''
+                        generatedBy: data.generatedBy || data.generatedByEmail || 'Anónimo',
+                        userPhotoURL: data.userPhotoURL,
+                        createdAt: data.createdAt?.toDate() || new Date(),
+                        userId: data.userId
                     });
                 });
                 
                 try {
-                    const subcodesRef = collection(db, 'subcodes');
-                    const subcodesSnapshot = await getDocs(subcodesRef);
-                    
+                    const subRef = collection(db, 'subcodes');
+                    const subSnapshot = await getDocs(subRef);
                     allSubcodes = [];
-                    subcodesSnapshot.forEach((doc) => {
+                    subSnapshot.forEach((doc) => {
                         const data = doc.data();
                         allSubcodes.push({
                             id: doc.id,
@@ -1188,59 +1303,49 @@
                             userId: data.userId
                         });
                     });
-                    
                     allSubcodes.sort((a, b) => a.createdAt - b.createdAt);
-                } catch (subcodeError) {
-                    console.warn('Error al cargar subcódigos:', subcodeError);
+                } catch (e) {
                     allSubcodes = [];
                 }
                 
                 updateStats();
                 renderTable();
-                
             } catch (error) {
-                console.error('Error al cargar códigos:', error);
-                let errorMessage = 'Error al cargar los códigos. ';
-                if (error.code === 'permission-denied') {
-                    errorMessage += 'Actualiza las reglas de Firestore.';
-                } else {
-                    errorMessage += 'Intenta refrescar.';
+                console.error('Error:', error);
+                if (elements.tableBody) {
+                    elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">Error al cargar datos</td></tr>';
                 }
-                showNotification(errorMessage, 'error');
-                elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">Error al cargar datos.</td></tr>';
             } finally {
                 showLoading(false);
             }
         }
 
         function updateStats() {
+            if (!elements.totalCodes) return;
+            
             const total = allCodes.length;
             const today = new Date().toDateString();
-            const todayCount = allCodes.filter(code => 
-                code.createdAt.toDateString() === today
-            ).length;
-            const userCodesCount = allCodes.filter(code => 
-                currentUser && code.userId === currentUser.uid
-            ).length;
+            const todayCount = allCodes.filter(c => c.createdAt.toDateString() === today).length;
+            const userCount = allCodes.filter(c => currentUser && c.userId === currentUser.uid).length;
             
             elements.totalCodes.textContent = total;
             elements.todayCodes.textContent = todayCount;
-            elements.userCodes.textContent = userCodesCount;
+            elements.userCodes.textContent = userCount;
         }
 
         function getFilteredCodes() {
             let filtered = allCodes;
             
             if (currentFilter === 'myCodes' && currentUser) {
-                filtered = filtered.filter(code => code.userId === currentUser.uid);
+                filtered = filtered.filter(c => c.userId === currentUser.uid);
             }
             
             if (currentSearch) {
-                const searchTerm = currentSearch.toLowerCase();
-                filtered = filtered.filter(code => 
-                    code.code.toLowerCase().includes(searchTerm) ||
-                    code.appName.toLowerCase().includes(searchTerm) ||
-                    code.generatedBy.toLowerCase().includes(searchTerm)
+                const term = currentSearch.toLowerCase();
+                filtered = filtered.filter(c => 
+                    c.code.toLowerCase().includes(term) ||
+                    c.appName.toLowerCase().includes(term) ||
+                    c.generatedBy.toLowerCase().includes(term)
                 );
             }
             
@@ -1248,15 +1353,15 @@
         }
 
         function renderTable() {
-            const filteredCodes = getFilteredCodes();
-            const totalPages = Math.ceil(filteredCodes.length / itemsPerPage);
+            if (!elements.tableBody) return;
             
-            if (currentPage > totalPages && totalPages > 0) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
+            const filtered = getFilteredCodes();
+            const totalPages = Math.ceil(filtered.length / itemsPerPage) || 1;
+            
+            if (currentPage > totalPages) currentPage = totalPages;
             
             const start = (currentPage - 1) * itemsPerPage;
-            const end = start + itemsPerPage;
-            const pageCodes = filteredCodes.slice(start, end);
+            const pageCodes = filtered.slice(start, start + itemsPerPage);
             
             if (pageCodes.length === 0) {
                 elements.tableBody.innerHTML = '<tr class="empty-row"><td colspan="7">No hay códigos</td></tr>';
@@ -1267,7 +1372,7 @@
             }
             
             let html = '';
-            let rowNumber = start + 1;
+            let rowNum = start + 1;
             
             pageCodes.forEach((code) => {
                 const isOwner = currentUser && code.userId === currentUser.uid;
@@ -1276,46 +1381,33 @@
                 
                 html += `
                     <tr>
-                        <td>
-                            ${subcodes.length > 0 ? 
-                                `<span class="expand-icon" onclick="window.toggleExpand('${code.id}')">${isExpanded ? '▼' : '▶'}</span>` : 
-                                ''}
-                        </td>
-                        <td>${rowNumber++}</td>
-                        <td>
-                            <strong style="color: #003366; font-family: monospace; font-size: 1.1rem;">${escapeHtml(code.code)}</strong>
-                            ${subcodes.length > 0 ? `<span class="subcode-badge">${subcodes.length}</span>` : ''}
-                        </td>
+                        <td>${subcodes.length ? `<span class="expand-icon" onclick="window.toggleExpand('${code.id}')">${isExpanded ? '▼' : '▶'}</span>` : ''}</td>
+                        <td>${rowNum++}</td>
+                        <td><strong style="color:#003366;font-family:monospace">${escapeHtml(code.code)}</strong>${subcodes.length ? `<span class="subcode-badge">${subcodes.length}</span>` : ''}</td>
                         <td>${escapeHtml(code.appName)}</td>
-                        <td><span class="user-badge ${isOwner ? 'owner' : ''}">${escapeHtml(code.generatedBy)}${isOwner ? ' (Tú)' : ''}</span></td>
+                        <td>
+                            <span class="user-badge ${isOwner ? 'owner' : ''}">
+                                ${code.userPhotoURL ? `<img src="${code.userPhotoURL}" style="width:20px;height:20px;border-radius:50%">` : ''}
+                                ${escapeHtml(code.generatedBy)}${isOwner ? ' (Tú)' : ''}
+                            </span>
+                        </td>
                         <td>${formatDateTime(code.createdAt)}</td>
                         <td>
                             <button class="copy-btn" onclick="window.copyToClipboard('${code.code}')">📋 Copiar</button>
                             <button class="subcode-btn" onclick="window.openSubcodeModal('${code.id}')">➕ Subcódigo</button>
-                            ${isOwner ? `<button class="delete-btn" onclick="window.deleteCodeById('${code.id}', '${code.userId}')">🗑️ Eliminar</button>` : ''}
+                            ${isOwner ? `<button class="delete-btn" onclick="window.deleteCodeById('${code.id}')">🗑️</button>` : ''}
                         </td>
                     </tr>
                 `;
                 
-                if (isExpanded && subcodes.length > 0) {
-                    subcodes.forEach((subcode) => {
+                if (isExpanded && subcodes.length) {
+                    subcodes.forEach((sub) => {
                         html += `
                             <tr class="subcode-row">
-                                <td></td>
-                                <td class="subcode-indent"></td>
-                                <td class="subcode-indent">
-                                    <span style="color: #0066CC;">↳ ${escapeHtml(subcode.name)}</span>
-                                </td>
-                                <td class="subcode-indent" colspan="3">
-                                    <div class="subcode-description">
-                                        ${escapeHtml(subcode.description) || '<em>Sin descripción</em>'}
-                                    </div>
-                                </td>
-                                <td>
-                                    ${subcode.userId === currentUser?.uid ? 
-                                        `<button class="delete-btn" onclick="window.deleteSubcodeById('${subcode.id}')">🗑️</button>` : 
-                                        ''}
-                                </td>
+                                <td></td><td class="subcode-indent"></td>
+                                <td class="subcode-indent"><span style="color:#0066CC">↳ ${escapeHtml(sub.name)}</span></td>
+                                <td class="subcode-indent" colspan="3"><div class="subcode-description">${escapeHtml(sub.description) || '<em>Sin descripción</em>'}</div></td>
+                                <td>${sub.userId === currentUser?.uid ? `<button class="delete-btn" onclick="window.deleteSubcodeById('${sub.id}')">🗑️</button>` : ''}</td>
                             </tr>
                         `;
                     });
@@ -1328,147 +1420,25 @@
             elements.nextPage.disabled = currentPage === totalPages;
             document.getElementById('pageInfo').textContent = `Página ${currentPage} de ${totalPages}`;
         }
-        
+
         function escapeHtml(str) {
             if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+            const map = {'&': '&amp;', '<': '&lt;', '>': '&gt;'};
+            return str.replace(/[&<>]/g, m => map[m]);
         }
 
-        async function initAuth() {
-            try {
-                const userCredential = await signInAnonymously(auth);
-                currentUser = userCredential.user;
-                elements.statusText.textContent = 'Conectado';
-                elements.statusIndicator.classList.add('connected');
-                await loadCodes();
-            } catch (error) {
-                console.error('Error de autenticación:', error);
-                elements.statusText.textContent = 'Error de conexión';
-                elements.statusIndicator.classList.add('error');
-                showNotification('Error al conectar con Firebase', 'error');
-            }
-        }
-
-        function setupEventListeners() {
-            elements.generateBtn.addEventListener('click', generateCode);
-            elements.refreshBtn.addEventListener('click', loadCodes);
-            elements.exportExcelBtn.addEventListener('click', () => exportToExcel());
-            elements.clearHistoryBtn.addEventListener('click', clearMyCodes);
-            
-            elements.searchInput.addEventListener('input', (e) => {
-                currentSearch = e.target.value;
-                currentPage = 1;
-                elements.clearSearch.style.display = currentSearch ? 'block' : 'none';
-                renderTable();
-            });
-            
-            elements.clearSearch.addEventListener('click', () => {
-                elements.searchInput.value = '';
-                currentSearch = '';
-                elements.clearSearch.style.display = 'none';
-                currentPage = 1;
-                renderTable();
-            });
-            
-            elements.filterAllBtn.addEventListener('click', () => {
-                currentFilter = 'all';
-                elements.filterAllBtn.classList.add('active');
-                elements.filterMyCodesBtn.classList.remove('active');
-                currentPage = 1;
-                renderTable();
-            });
-            
-            elements.filterMyCodesBtn.addEventListener('click', () => {
-                currentFilter = 'myCodes';
-                elements.filterMyCodesBtn.classList.add('active');
-                elements.filterAllBtn.classList.remove('active');
-                currentPage = 1;
-                renderTable();
-            });
-            
-            elements.prevPage.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    renderTable();
-                }
-            });
-            
-            elements.nextPage.addEventListener('click', () => {
-                const filteredCodes = getFilteredCodes();
-                const totalPages = Math.ceil(filteredCodes.length / itemsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    renderTable();
-                }
-            });
-            
-            elements.saveSubcodeBtn.addEventListener('click', saveSubcode);
-            
-            document.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter' && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-                    generateCode();
-                }
-            });
-            
-            window.onclick = function(event) {
-                if (event.target === elements.subcodeModal) {
-                    closeSubcodeModal();
-                }
-            }
-        }
-
-        async function saveSubcode() {
-            const name = elements.subcodeName.value.trim();
-            const description = elements.subcodeDescription.value.trim();
-            
-            if (!name) {
-                showNotification('Por favor, ingresa un nombre para el subcódigo', 'warning');
-                return;
-            }
-            
-            if (!currentParentCodeId) {
-                showNotification('Error: No se ha seleccionado un código padre', 'error');
-                return;
-            }
-            
-            showLoading(true);
-            
-            try {
-                const subcodesRef = collection(db, 'subcodes');
-                await addDoc(subcodesRef, {
-                    parentCodeId: currentParentCodeId,
-                    name: name,
-                    description: description,
-                    createdAt: Timestamp.fromDate(new Date()),
-                    userId: currentUser.uid
-                });
-                
-                showNotification('Subcódigo creado correctamente', 'success');
-                closeSubcodeModal();
-                await loadCodes();
-                
-            } catch (error) {
-                console.error('Error al guardar subcódigo:', error);
-                showNotification('Error al guardar el subcódigo', 'error');
-            } finally {
-                showLoading(false);
-            }
-        }
-
-        async function deleteSubcode(id) {
-            if (confirm('¿Estás seguro de que quieres eliminar este subcódigo?')) {
+        async function deleteCode(id) {
+            if (confirm('¿Eliminar este código y sus subcódigos?')) {
                 showLoading(true);
                 try {
-                    await deleteDoc(doc(db, 'subcodes', id));
-                    showNotification('Subcódigo eliminado', 'success');
+                    const subRef = collection(db, 'subcodes');
+                    const q = query(subRef, where('parentCodeId', '==', id));
+                    const snapshot = await getDocs(q);
+                    for (const doc of snapshot.docs) await deleteDoc(doc.ref);
+                    await deleteDoc(doc(db, 'neu_codes', id));
+                    showNotification('Eliminado correctamente', 'success');
                     await loadCodes();
                 } catch (error) {
-                    console.error('Error al eliminar subcódigo:', error);
                     showNotification('Error al eliminar', 'error');
                 } finally {
                     showLoading(false);
@@ -1476,89 +1446,220 @@
             }
         }
 
-        window.exportToExcel = function() {
-            const filteredCodes = getFilteredCodes();
-            
-            if (filteredCodes.length === 0) {
-                showNotification('No hay datos para exportar', 'warning');
+        async function clearMyCodes() {
+            if (currentFilter !== 'myCodes') {
+                showNotification('Cambia al filtro "Mis Códigos"', 'warning');
                 return;
             }
             
-            const exportData = [];
-            let index = 1;
+            const myCodes = getFilteredCodes();
+            if (!myCodes.length) {
+                showNotification('No tienes códigos', 'warning');
+                return;
+            }
             
-            filteredCodes.forEach((code) => {
-                exportData.push({
-                    '#': index++,
+            if (confirm(`¿Eliminar TODOS tus ${myCodes.length} códigos?`)) {
+                showLoading(true);
+                try {
+                    for (const code of myCodes) {
+                        const subRef = collection(db, 'subcodes');
+                        const q = query(subRef, where('parentCodeId', '==', code.id));
+                        const snapshot = await getDocs(q);
+                        for (const doc of snapshot.docs) await deleteDoc(doc.ref);
+                        await deleteDoc(doc(db, 'neu_codes', code.id));
+                    }
+                    showNotification(`${myCodes.length} códigos eliminados`, 'success');
+                    await loadCodes();
+                } catch (error) {
+                    showNotification('Error al limpiar', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+        }
+
+        async function saveSubcode() {
+            const name = elements.subcodeName?.value.trim();
+            if (!name) {
+                showNotification('Ingresa un nombre', 'warning');
+                return;
+            }
+            
+            showLoading(true);
+            try {
+                await addDoc(collection(db, 'subcodes'), {
+                    parentCodeId: currentParentCodeId,
+                    name: name,
+                    description: elements.subcodeDescription?.value.trim() || '',
+                    createdAt: Timestamp.fromDate(new Date()),
+                    userId: currentUser.uid
+                });
+                showNotification('Subcódigo creado', 'success');
+                closeSubcodeModal();
+                await loadCodes();
+            } catch (error) {
+                showNotification('Error al guardar', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function deleteSubcode(id) {
+            if (confirm('¿Eliminar este subcódigo?')) {
+                showLoading(true);
+                try {
+                    await deleteDoc(doc(db, 'subcodes', id));
+                    showNotification('Eliminado', 'success');
+                    await loadCodes();
+                } catch (error) {
+                    showNotification('Error', 'error');
+                } finally {
+                    showLoading(false);
+                }
+            }
+        }
+
+        function exportToExcel() {
+            const filtered = getFilteredCodes();
+            if (!filtered.length) {
+                showNotification('No hay datos', 'warning');
+                return;
+            }
+            
+            const data = [];
+            let idx = 1;
+            filtered.forEach((code) => {
+                data.push({
+                    '#': idx++,
                     'Código NEU': code.code,
                     'Aplicación': code.appName,
                     'Generado por': code.generatedBy,
-                    'Fecha de Generación': formatDateTime(code.createdAt),
-                    'Tipo': 'Principal'
+                    'Fecha': formatDateTime(code.createdAt)
                 });
-                
-                const subcodes = allSubcodes.filter(s => s.parentCodeId === code.id);
-                subcodes.forEach((subcode) => {
-                    exportData.push({
+                allSubcodes.filter(s => s.parentCodeId === code.id).forEach((sub) => {
+                    data.push({
                         '#': '',
-                        'Código NEU': `↳ ${subcode.name}`,
-                        'Aplicación': subcode.description || 'Sin descripción',
+                        'Código NEU': `↳ ${sub.name}`,
+                        'Aplicación': sub.description || '',
                         'Generado por': '',
-                        'Fecha de Generación': formatDateTime(subcode.createdAt),
-                        'Tipo': 'Subcódigo'
+                        'Fecha': formatDateTime(sub.createdAt)
                     });
                 });
             });
             
-            const ws = XLSX.utils.json_to_sheet(exportData);
+            const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'Códigos NEU');
+            XLSX.writeFile(wb, `NEU_codes_${new Date().toISOString().slice(0,10)}.xlsx`);
+            showNotification(`Exportados ${filtered.length} códigos`, 'success');
+        }
+
+        function setupEventListeners() {
+            if (elements.generateBtn) elements.generateBtn.addEventListener('click', generateCode);
+            if (elements.refreshBtn) elements.refreshBtn.addEventListener('click', loadCodes);
+            if (elements.exportExcelBtn) elements.exportExcelBtn.addEventListener('click', exportToExcel);
+            if (elements.clearHistoryBtn) elements.clearHistoryBtn.addEventListener('click', clearMyCodes);
+            if (elements.saveSubcodeBtn) elements.saveSubcodeBtn.addEventListener('click', saveSubcode);
             
-            const fileName = `NEU_codes_${new Date().toISOString().slice(0,19)}.xlsx`;
-            XLSX.writeFile(wb, fileName);
-            showNotification(`Exportados ${filteredCodes.length} códigos`, 'success');
-        };
+            if (elements.searchInput) {
+                elements.searchInput.addEventListener('input', (e) => {
+                    currentSearch = e.target.value;
+                    currentPage = 1;
+                    if (elements.clearSearch) elements.clearSearch.style.display = currentSearch ? 'block' : 'none';
+                    renderTable();
+                });
+            }
+            
+            if (elements.clearSearch) {
+                elements.clearSearch.addEventListener('click', () => {
+                    elements.searchInput.value = '';
+                    currentSearch = '';
+                    elements.clearSearch.style.display = 'none';
+                    currentPage = 1;
+                    renderTable();
+                });
+            }
+            
+            if (elements.filterAllBtn) {
+                elements.filterAllBtn.addEventListener('click', () => {
+                    currentFilter = 'all';
+                    elements.filterAllBtn.classList.add('active');
+                    elements.filterMyCodesBtn.classList.remove('active');
+                    currentPage = 1;
+                    renderTable();
+                });
+            }
+            
+            if (elements.filterMyCodesBtn) {
+                elements.filterMyCodesBtn.addEventListener('click', () => {
+                    currentFilter = 'myCodes';
+                    elements.filterMyCodesBtn.classList.add('active');
+                    elements.filterAllBtn.classList.remove('active');
+                    currentPage = 1;
+                    renderTable();
+                });
+            }
+            
+            if (elements.prevPage) {
+                elements.prevPage.addEventListener('click', () => {
+                    if (currentPage > 1) { currentPage--; renderTable(); }
+                });
+            }
+            
+            if (elements.nextPage) {
+                elements.nextPage.addEventListener('click', () => {
+                    const total = Math.ceil(getFilteredCodes().length / itemsPerPage);
+                    if (currentPage < total) { currentPage++; renderTable(); }
+                });
+            }
+        }
 
-        window.copyToClipboard = function(code) {
-            navigator.clipboard.writeText(code).then(() => {
-                showNotification(`Código "${code}" copiado`, 'success');
-            }).catch(() => {
-                showNotification('Error al copiar', 'error');
-            });
+        window.copyToClipboard = (code) => {
+            navigator.clipboard.writeText(code).then(() => showNotification(`Copiado: ${code}`)).catch(() => showNotification('Error al copiar', 'error'));
         };
-
-        window.deleteCodeById = function(id, userId) {
-            deleteCode(id, userId);
+        
+        window.deleteCodeById = (id) => deleteCode(id);
+        
+        window.openSubcodeModal = (parentId) => {
+            currentParentCodeId = parentId;
+            if (elements.subcodeName) elements.subcodeName.value = '';
+            if (elements.subcodeDescription) elements.subcodeDescription.value = '';
+            if (elements.subcodeModal) elements.subcodeModal.style.display = 'block';
         };
-
-        window.openSubcodeModal = function(parentCodeId) {
-            currentParentCodeId = parentCodeId;
-            elements.subcodeName.value = '';
-            elements.subcodeDescription.value = '';
-            elements.modalTitle.textContent = 'Agregar Subcódigo';
-            elements.subcodeModal.style.display = 'block';
-        };
-
-        window.closeSubcodeModal = function() {
-            elements.subcodeModal.style.display = 'none';
+        
+        window.closeSubcodeModal = () => {
+            if (elements.subcodeModal) elements.subcodeModal.style.display = 'none';
             currentParentCodeId = null;
         };
-
-        window.toggleExpand = function(codeId) {
-            if (expandedRows.has(codeId)) {
-                expandedRows.delete(codeId);
-            } else {
-                expandedRows.add(codeId);
-            }
+        
+        window.toggleExpand = (codeId) => {
+            expandedRows.has(codeId) ? expandedRows.delete(codeId) : expandedRows.add(codeId);
             renderTable();
         };
+        
+        window.deleteSubcodeById = (id) => deleteSubcode(id);
 
-        window.deleteSubcodeById = function(id) {
-            deleteSubcode(id);
+        window.onclick = (event) => {
+            if (event.target === elements.subcodeModal) {
+                closeSubcodeModal();
+            }
         };
 
-        setupEventListeners();
-        initAuth();
+        saveMainContent();
+        
+        loginBtn.addEventListener('click', loginWithGoogle);
+        googleLoginBtn.addEventListener('click', loginWithGoogle);
+        logoutBtn.addEventListener('click', logout);
+        
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                updateUIForLoggedInUser();
+            } else {
+                currentUser = null;
+                updateUIForLoggedOutUser();
+            }
+        });
     </script>
 </body>
 </html>
