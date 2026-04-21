@@ -749,7 +749,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>⚡ Generador Proyectos NEU DOMLS QUITO</h1>
+            <h1>Generador Proyectos NEU DOMLS QUITO</h1>
             <div class="user-section">
                 <div id="userInfo" class="user-info" style="display: none;">
                     <img id="userAvatar" class="user-avatar" src="" alt="">
@@ -783,8 +783,6 @@
         </div>
         <div id="notification" class="notification"></div>
     </div>
-
-    <!-- Modal para crear subcódigo -->
     <div id="subcodeModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1248,7 +1246,7 @@
                     estacion: estacionValue
                 });
                 
-                showNotification(`✅ Código generado: ${code}`, 'success');
+                showNotification(`Código generado: ${code}`, 'success');
                 elements.firstName.value = '';
                 elements.lastName.value = '';
                 elements.appName.value = '';
@@ -1393,9 +1391,9 @@
                         </td>
                         <td>${formatDateTime(code.createdAt)}</td>
                         <td>
-                            <button class="copy-btn" onclick="window.copyToClipboard('${code.code}')">📋 Copiar</button>
-                            <button class="subcode-btn" onclick="window.openSubcodeModal('${code.id}')">➕ Subcódigo</button>
-                            ${isOwner ? `<button class="delete-btn" onclick="window.deleteCodeById('${code.id}')">🗑️</button>` : ''}
+                            <button class="copy-btn" onclick="window.copyToClipboard('${code.code}')">Copiar</button>
+                            <button class="subcode-btn" onclick="window.openSubcodeModal('${code.id}')">Subcódigo</button>
+                            ${isOwner ? `<button class="delete-btn" onclick="window.deleteCodeById('${code.id}')"></button>` : ''}
                         </td>
                     </tr>
                 `;
